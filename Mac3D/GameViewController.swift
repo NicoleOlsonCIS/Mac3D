@@ -19,7 +19,7 @@ class GameViewController: NSViewController {
     
     override func viewDidLoad() {
         print(message)
-        print(reverse(text: "stressed"))
+        print(reverse(text: "linking github test."))
         super.viewDidLoad()
         
         // create a new scene
