@@ -13,8 +13,13 @@ class GameViewController: NSViewController {
     
     let message = "Hello Git!"
     
+    func reverse(text: String) -> String {
+        return String(text.reversed())
+    }
+    
     override func viewDidLoad() {
         print(message)
+        print(reverse(text: "stressed"))
         super.viewDidLoad()
         
         // create a new scene
