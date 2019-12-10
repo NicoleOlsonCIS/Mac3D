@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		87DDE0F723A02B4100B8D285 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE0F623A02B4100B8D285 /* AppDelegate.swift */; };
+		87DDE0F923A02B4100B8D285 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE0F823A02B4100B8D285 /* GameViewController.swift */; };
+		87DDE0FB23A02B4100B8D285 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 87DDE0FA23A02B4100B8D285 /* art.scnassets */; };
+		87DDE0FD23A02B4300B8D285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87DDE0FC23A02B4300B8D285 /* Assets.xcassets */; };
+		87DDE10023A02B4300B8D285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87DDE0FE23A02B4300B8D285 /* Main.storyboard */; };
+		87DDE10C23A02B4300B8D285 /* Mac3DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE10B23A02B4300B8D285 /* Mac3DTests.swift */; };
+		87DDE11723A02B4300B8D285 /* Mac3DUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE11623A02B4300B8D285 /* Mac3DUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		87DDE10823A02B4300B8D285 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87DDE0EB23A02B4100B8D285 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87DDE0F223A02B4100B8D285;
+			remoteInfo = Mac3D;
+		};
+		87DDE11323A02B4300B8D285 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87DDE0EB23A02B4100B8D285 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87DDE0F223A02B4100B8D285;
+			remoteInfo = Mac3D;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		87DDE0F323A02B4100B8D285 /* Mac3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mac3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DDE0F623A02B4100B8D285 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		87DDE0F823A02B4100B8D285 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		87DDE0FA23A02B4100B8D285 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		87DDE0FC23A02B4300B8D285 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		87DDE0FF23A02B4300B8D285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		87DDE10123A02B4300B8D285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DDE10223A02B4300B8D285 /* Mac3D.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mac3D.entitlements; sourceTree = "<group>"; };
+		87DDE10723A02B4300B8D285 /* Mac3DTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mac3DTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DDE10B23A02B4300B8D285 /* Mac3DTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mac3DTests.swift; sourceTree = "<group>"; };
+		87DDE10D23A02B4300B8D285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DDE11223A02B4300B8D285 /* Mac3DUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Mac3DUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DDE11623A02B4300B8D285 /* Mac3DUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mac3DUITests.swift; sourceTree = "<group>"; };
+		87DDE11823A02B4300B8D285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		87DDE0F023A02B4100B8D285 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DDE10423A02B4300B8D285 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DDE10F23A02B4300B8D285 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		87DDE0EA23A02B4100B8D285 = {
+			isa = PBXGroup;
+			children = (
+				87DDE0F523A02B4100B8D285 /* Mac3D */,
+				87DDE10A23A02B4300B8D285 /* Mac3DTests */,
+				87DDE11523A02B4300B8D285 /* Mac3DUITests */,
+				87DDE0F423A02B4100B8D285 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		87DDE0F423A02B4100B8D285 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				87DDE0F323A02B4100B8D285 /* Mac3D.app */,
+				87DDE10723A02B4300B8D285 /* Mac3DTests.xctest */,
+				87DDE11223A02B4300B8D285 /* Mac3DUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		87DDE0F523A02B4100B8D285 /* Mac3D */ = {
+			isa = PBXGroup;
+			children = (
+				87DDE0F623A02B4100B8D285 /* AppDelegate.swift */,
+				87DDE0F823A02B4100B8D285 /* GameViewController.swift */,
+				87DDE0FA23A02B4100B8D285 /* art.scnassets */,
+				87DDE0FC23A02B4300B8D285 /* Assets.xcassets */,
+				87DDE0FE23A02B4300B8D285 /* Main.storyboard */,
+				87DDE10123A02B4300B8D285 /* Info.plist */,
+				87DDE10223A02B4300B8D285 /* Mac3D.entitlements */,
+			);
+			path = Mac3D;
+			sourceTree = "<group>";
+		};
+		87DDE10A23A02B4300B8D285 /* Mac3DTests */ = {
+			isa = PBXGroup;
+			children = (
+				87DDE10B23A02B4300B8D285 /* Mac3DTests.swift */,
+				87DDE10D23A02B4300B8D285 /* Info.plist */,
+			);
+			path = Mac3DTests;
+			sourceTree = "<group>";
+		};
+		87DDE11523A02B4300B8D285 /* Mac3DUITests */ = {
+			isa = PBXGroup;
+			children = (
+				87DDE11623A02B4300B8D285 /* Mac3DUITests.swift */,
+				87DDE11823A02B4300B8D285 /* Info.plist */,
+			);
+			path = Mac3DUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		87DDE0F223A02B4100B8D285 /* Mac3D */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DDE11B23A02B4300B8D285 /* Build configuration list for PBXNativeTarget "Mac3D" */;
+			buildPhases = (
+				87DDE0EF23A02B4100B8D285 /* Sources */,
+				87DDE0F023A02B4100B8D285 /* Frameworks */,
+				87DDE0F123A02B4100B8D285 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mac3D;
+			productName = Mac3D;
+			productReference = 87DDE0F323A02B4100B8D285 /* Mac3D.app */;
+			productType = "com.apple.product-type.application";
+		};
+		87DDE10623A02B4300B8D285 /* Mac3DTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DDE11E23A02B4300B8D285 /* Build configuration list for PBXNativeTarget "Mac3DTests" */;
+			buildPhases = (
+				87DDE10323A02B4300B8D285 /* Sources */,
+				87DDE10423A02B4300B8D285 /* Frameworks */,
+				87DDE10523A02B4300B8D285 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87DDE10923A02B4300B8D285 /* PBXTargetDependency */,
+			);
+			name = Mac3DTests;
+			productName = Mac3DTests;
+			productReference = 87DDE10723A02B4300B8D285 /* Mac3DTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		87DDE11123A02B4300B8D285 /* Mac3DUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DDE12123A02B4300B8D285 /* Build configuration list for PBXNativeTarget "Mac3DUITests" */;
+			buildPhases = (
+				87DDE10E23A02B4300B8D285 /* Sources */,
+				87DDE10F23A02B4300B8D285 /* Frameworks */,
+				87DDE11023A02B4300B8D285 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87DDE11423A02B4300B8D285 /* PBXTargetDependency */,
+			);
+			name = Mac3DUITests;
+			productName = Mac3DUITests;
+			productReference = 87DDE11223A02B4300B8D285 /* Mac3DUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		87DDE0EB23A02B4100B8D285 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Nicole Olson";
+				TargetAttributes = {
+					87DDE0F223A02B4100B8D285 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+					87DDE10623A02B4300B8D285 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 87DDE0F223A02B4100B8D285;
+					};
+					87DDE11123A02B4300B8D285 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 87DDE0F223A02B4100B8D285;
+					};
+				};
+			};
+			buildConfigurationList = 87DDE0EE23A02B4100B8D285 /* Build configuration list for PBXProject "Mac3D" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 87DDE0EA23A02B4100B8D285;
+			productRefGroup = 87DDE0F423A02B4100B8D285 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				87DDE0F223A02B4100B8D285 /* Mac3D */,
+				87DDE10623A02B4300B8D285 /* Mac3DTests */,
+				87DDE11123A02B4300B8D285 /* Mac3DUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		87DDE0F123A02B4100B8D285 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DDE10023A02B4300B8D285 /* Main.storyboard in Resources */,
+				87DDE0FD23A02B4300B8D285 /* Assets.xcassets in Resources */,
+				87DDE0FB23A02B4100B8D285 /* art.scnassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DDE10523A02B4300B8D285 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DDE11023A02B4300B8D285 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		87DDE0EF23A02B4100B8D285 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DDE0F923A02B4100B8D285 /* GameViewController.swift in Sources */,
+				87DDE0F723A02B4100B8D285 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DDE10323A02B4300B8D285 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DDE10C23A02B4300B8D285 /* Mac3DTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DDE10E23A02B4300B8D285 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DDE11723A02B4300B8D285 /* Mac3DUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		87DDE10923A02B4300B8D285 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87DDE0F223A02B4100B8D285 /* Mac3D */;
+			targetProxy = 87DDE10823A02B4300B8D285 /* PBXContainerItemProxy */;
+		};
+		87DDE11423A02B4300B8D285 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87DDE0F223A02B4100B8D285 /* Mac3D */;
+			targetProxy = 87DDE11323A02B4300B8D285 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		87DDE0FE23A02B4300B8D285 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				87DDE0FF23A02B4300B8D285 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		87DDE11923A02B4300B8D285 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		87DDE11A23A02B4300B8D285 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		87DDE11C23A02B4300B8D285 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mac3D/Mac3D.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Mac3D/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Family-of-Kyps.Mac3D";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		87DDE11D23A02B4300B8D285 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mac3D/Mac3D.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Mac3D/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Family-of-Kyps.Mac3D";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		87DDE11F23A02B4300B8D285 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Mac3DTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Family-of-Kyps.Mac3DTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mac3D.app/Contents/MacOS/Mac3D";
+			};
+			name = Debug;
+		};
+		87DDE12023A02B4300B8D285 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Mac3DTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Family-of-Kyps.Mac3DTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mac3D.app/Contents/MacOS/Mac3D";
+			};
+			name = Release;
+		};
+		87DDE12223A02B4300B8D285 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Mac3DUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Family-of-Kyps.Mac3DUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_TARGET_NAME = Mac3D;
+			};
+			name = Debug;
+		};
+		87DDE12323A02B4300B8D285 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Mac3DUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Family-of-Kyps.Mac3DUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_TARGET_NAME = Mac3D;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		87DDE0EE23A02B4100B8D285 /* Build configuration list for PBXProject "Mac3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DDE11923A02B4300B8D285 /* Debug */,
+				87DDE11A23A02B4300B8D285 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87DDE11B23A02B4300B8D285 /* Build configuration list for PBXNativeTarget "Mac3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DDE11C23A02B4300B8D285 /* Debug */,
+				87DDE11D23A02B4300B8D285 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87DDE11E23A02B4300B8D285 /* Build configuration list for PBXNativeTarget "Mac3DTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DDE11F23A02B4300B8D285 /* Debug */,
+				87DDE12023A02B4300B8D285 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87DDE12123A02B4300B8D285 /* Build configuration list for PBXNativeTarget "Mac3DUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DDE12223A02B4300B8D285 /* Debug */,
+				87DDE12323A02B4300B8D285 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 87DDE0EB23A02B4100B8D285 /* Project object */;
+}
