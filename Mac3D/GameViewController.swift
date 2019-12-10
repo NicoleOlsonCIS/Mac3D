@@ -11,7 +11,10 @@ import QuartzCore
 
 class GameViewController: NSViewController {
     
+    let message = "Hello Git!"
+    
     override func viewDidLoad() {
+        print(message)
         super.viewDidLoad()
         
         // create a new scene
