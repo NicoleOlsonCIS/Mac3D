@@ -7,9 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87B7352A23A30DFC001D47BA /* space.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7352923A30DFC001D47BA /* space.scn */; };
+		87B7352C23A30E17001D47BA /* planet.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7352B23A30E17001D47BA /* planet.scn */; };
+		87B7352E23A30F0A001D47BA /* space2.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7352D23A30F0A001D47BA /* space2.scn */; };
+		87B7353023A311B9001D47BA /* smallplanet.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7352F23A311B9001D47BA /* smallplanet.scn */; };
+		87B7353223A31C5D001D47BA /* multicolor.png in Resources */ = {isa = PBXBuildFile; fileRef = 87B7353123A31C5D001D47BA /* multicolor.png */; };
+		87B7353423A320BD001D47BA /* sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 87B7353323A320BD001D47BA /* sun.png */; };
+		87B7353623A32942001D47BA /* hiddenNode.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7353523A32942001D47BA /* hiddenNode.scn */; };
+		87B7353823A32B39001D47BA /* hiddenNode2.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7353723A32B39001D47BA /* hiddenNode2.scn */; };
+		87B7353A23A32B8F001D47BA /* planet2.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7353923A32B8F001D47BA /* planet2.scn */; };
+		87B7353C23A32C21001D47BA /* fireworks.png in Resources */ = {isa = PBXBuildFile; fileRef = 87B7353B23A32C21001D47BA /* fireworks.png */; };
+		87C0770923A3330800D6BC5D /* surface1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 87C0770823A3330800D6BC5D /* surface1.jpg */; };
+		87C0770B23A3447D00D6BC5D /* SceneKit Scene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87C0770A23A3447D00D6BC5D /* SceneKit Scene.scn */; };
+		87C0770D23A3599000D6BC5D /* world.png in Resources */ = {isa = PBXBuildFile; fileRef = 87C0770C23A3599000D6BC5D /* world.png */; };
 		87DDE0F723A02B4100B8D285 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE0F623A02B4100B8D285 /* AppDelegate.swift */; };
 		87DDE0F923A02B4100B8D285 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE0F823A02B4100B8D285 /* GameViewController.swift */; };
-		87DDE0FB23A02B4100B8D285 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 87DDE0FA23A02B4100B8D285 /* art.scnassets */; };
 		87DDE0FD23A02B4300B8D285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87DDE0FC23A02B4300B8D285 /* Assets.xcassets */; };
 		87DDE10023A02B4300B8D285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87DDE0FE23A02B4300B8D285 /* Main.storyboard */; };
 		87DDE10C23A02B4300B8D285 /* Mac3DTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE10B23A02B4300B8D285 /* Mac3DTests.swift */; };
@@ -34,10 +46,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		87B7352923A30DFC001D47BA /* space.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = space.scn; sourceTree = "<group>"; };
+		87B7352B23A30E17001D47BA /* planet.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = planet.scn; sourceTree = "<group>"; };
+		87B7352D23A30F0A001D47BA /* space2.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = space2.scn; sourceTree = "<group>"; };
+		87B7352F23A311B9001D47BA /* smallplanet.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = smallplanet.scn; sourceTree = "<group>"; };
+		87B7353123A31C5D001D47BA /* multicolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = multicolor.png; path = ../../multicolor.png; sourceTree = "<group>"; };
+		87B7353323A320BD001D47BA /* sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sun.png; path = ../../sun.png; sourceTree = "<group>"; };
+		87B7353523A32942001D47BA /* hiddenNode.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = hiddenNode.scn; sourceTree = "<group>"; };
+		87B7353723A32B39001D47BA /* hiddenNode2.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = hiddenNode2.scn; sourceTree = "<group>"; };
+		87B7353923A32B8F001D47BA /* planet2.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = planet2.scn; sourceTree = "<group>"; };
+		87B7353B23A32C21001D47BA /* fireworks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fireworks.png; path = ../../fireworks.png; sourceTree = "<group>"; };
+		87C0770823A3330800D6BC5D /* surface1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface1.jpg; sourceTree = "<group>"; };
+		87C0770A23A3447D00D6BC5D /* SceneKit Scene.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "SceneKit Scene.scn"; sourceTree = "<group>"; };
+		87C0770C23A3599000D6BC5D /* world.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = world.png; sourceTree = "<group>"; };
 		87DDE0F323A02B4100B8D285 /* Mac3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mac3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87DDE0F623A02B4100B8D285 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87DDE0F823A02B4100B8D285 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		87DDE0FA23A02B4100B8D285 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		87DDE0FC23A02B4300B8D285 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		87DDE0FF23A02B4300B8D285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		87DDE10123A02B4300B8D285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -98,9 +122,21 @@
 		87DDE0F523A02B4100B8D285 /* Mac3D */ = {
 			isa = PBXGroup;
 			children = (
+				87C0770A23A3447D00D6BC5D /* SceneKit Scene.scn */,
+				87B7353723A32B39001D47BA /* hiddenNode2.scn */,
+				87B7353523A32942001D47BA /* hiddenNode.scn */,
+				87B7352F23A311B9001D47BA /* smallplanet.scn */,
+				87B7352B23A30E17001D47BA /* planet.scn */,
+				87B7353323A320BD001D47BA /* sun.png */,
+				87B7353123A31C5D001D47BA /* multicolor.png */,
+				87B7353B23A32C21001D47BA /* fireworks.png */,
+				87B7352923A30DFC001D47BA /* space.scn */,
+				87C0770823A3330800D6BC5D /* surface1.jpg */,
+				87B7353923A32B8F001D47BA /* planet2.scn */,
+				87B7352D23A30F0A001D47BA /* space2.scn */,
+				87C0770C23A3599000D6BC5D /* world.png */,
 				87DDE0F623A02B4100B8D285 /* AppDelegate.swift */,
 				87DDE0F823A02B4100B8D285 /* GameViewController.swift */,
-				87DDE0FA23A02B4100B8D285 /* art.scnassets */,
 				87DDE0FC23A02B4300B8D285 /* Assets.xcassets */,
 				87DDE0FE23A02B4300B8D285 /* Main.storyboard */,
 				87DDE10123A02B4300B8D285 /* Info.plist */,
@@ -231,9 +267,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87B7353C23A32C21001D47BA /* fireworks.png in Resources */,
+				87C0770D23A3599000D6BC5D /* world.png in Resources */,
+				87B7353423A320BD001D47BA /* sun.png in Resources */,
+				87B7352E23A30F0A001D47BA /* space2.scn in Resources */,
+				87B7352C23A30E17001D47BA /* planet.scn in Resources */,
+				87C0770B23A3447D00D6BC5D /* SceneKit Scene.scn in Resources */,
 				87DDE10023A02B4300B8D285 /* Main.storyboard in Resources */,
 				87DDE0FD23A02B4300B8D285 /* Assets.xcassets in Resources */,
-				87DDE0FB23A02B4100B8D285 /* art.scnassets in Resources */,
+				87B7353223A31C5D001D47BA /* multicolor.png in Resources */,
+				87B7353823A32B39001D47BA /* hiddenNode2.scn in Resources */,
+				87C0770923A3330800D6BC5D /* surface1.jpg in Resources */,
+				87B7353023A311B9001D47BA /* smallplanet.scn in Resources */,
+				87B7352A23A30DFC001D47BA /* space.scn in Resources */,
+				87B7353A23A32B8F001D47BA /* planet2.scn in Resources */,
+				87B7353623A32942001D47BA /* hiddenNode.scn in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
