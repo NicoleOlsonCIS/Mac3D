@@ -6,26 +6,87 @@
 //  Copyright © 2019 Nicole Olson. All rights reserved.
 //
 
+
 import SceneKit
 import AppKit
 import Foundation
 
+var levelMax = 3
+let rootPath = "/Users/nicoleolson"
+
+// to represent locations of planets
+struct Location {
+    var x:Double
+    var y:Double
+    var z:Double
+}
+
+struct IllustratedDirectory
+{
+    var center:Location
+    var max_x:Double
+    var min_x:Double
+    var max_z:Double
+    var min_z:Double
+    //var level = 0
+}
+
 class GameViewController: NSViewController
 {
-    
     var sceneView:SCNView!
     var scene: SCNScene!
     var camera: SCNCamera!
-    //var leftButtonDown: Bool
-    //var rightButtonDown: Bool
+    let center = SCNVector3(x: 0, y: 0, z: 0)
+    var root = FSNode(x: 0, y: 0, z: 0, name: "Root", kind: "NSFileTypeDirectory", path: rootPath, level: 1)
+    var currentPath = "/Users/nicoleolson"
+    var current_illustrated_directories: Array<IllustratedDirectory> = []
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+        initSpaceView()
         setupScene()
-        setupNodes()
+        // setupNodes()
     }
+    
+    // uses FSNodes to construct scene
+    func initSpaceView()
+    {
+        let children = root.children
+        var directory_names = [String]()
+        var non_directory_names = [String]()
+        var child_directory_names = [String]()
+        var child_non_directory_names = [String]()
+        var directory_locations = [Location]()
+        var child_directory_locations = [Location]()
+        
+        for c in children
+        {
+            if c.kind == "NSFileTypeDirectory"
+            {
+                directory_names.append(c.name)
+                // get the moons of the directories
+                let dir_children = c.children
+                
+                for d_c in dir_children
+                {
+                    if d_c.kind == "NSFileTypeDirectory"
+                    {
+                        child_directory_names.append(d_c.name)
+                    }
+                    else
+                    {
+                        child_non_directory_names.append(d_c.name)
+                    }
+                }
+                
+            }
+                
+            else{non_directory_names.append(c.name)}
+        }
+    }
+    
+    
     
     func setupScene()
     {
@@ -33,36 +94,33 @@ class GameViewController: NSViewController
         sceneView.allowsCameraControl = true // allows you to look around the scene
         scene = SCNScene(named: "space.scn")
         sceneView.scene = scene
+        sceneView.delegate = self // sets the delegate of the Scene Kit view to self. So that the view can call the delegate methods that are implemented in GameViewController
         
         let dehClickies = NSClickGestureRecognizer()
         dehClickies.action = #selector(GameViewController.sceneViewClicked(recognizer:))
         sceneView.gestureRecognizers = [dehClickies]
+        createStars()
     }
     
     // each "scene"
-    func setupNodes()
+    /*func setupNodes()
     {
-        let center = SCNVector3(
-            x: 0,
-            y: 0,
-            z: 0
-        )
-        
-        // figure out how many top level directories there are
-        
-        // create the top level directories
-        let contents = getContentsAtPath(path: "/")
-        print(contents)
+        let contents = getCDContents(path: rootPath, full: false) // must be user variable eventually
         
         var xCent = 0.0
         var zCent = 0.0
         var count = 0
-        // get a location
         var xDirlocations = [Float]()
         var zDirlocations = [Float]()
         
         for dir in contents
         {
+            var curPath = rootPath + "/" + dir
+            let moons = getCDContents(path: curPath, full: false)
+            //print("contents at " + curPath)
+            //print(moons)
+            
+            
             for iSphere in 1...Int(contents.count) - 1
             {
                 // compute the location of the current planet
@@ -84,7 +142,7 @@ class GameViewController: NSViewController
                             if abs(Double(xPos) - xCent) < 3
                             {
                                 foundTooClose = true
-                                print("to close")
+                                //print("to close")
                                 break
                             }
                         }
@@ -104,7 +162,7 @@ class GameViewController: NSViewController
             xDirlocations.append(Float(xCent))
             zDirlocations.append(Float(zCent))
             
-            print(dir)
+            //print(dir)
             let sizeOfDir = dir.count
             let offsetLetter = sizeOfDir / 2
             
@@ -141,7 +199,7 @@ class GameViewController: NSViewController
             
             let numPlanets = Double(names.count)
             
-            var speed = 1000.0
+            var speed = 300.0
             let xMin = 1.0
             let xMax = numPlanets/3
             let zMin = 1.0
@@ -204,7 +262,18 @@ class GameViewController: NSViewController
                 xlocations.append(Float(xPlace))
                 zlocations.append(Float(zPlace))
                 
-                curName = names[iSphere]
+                
+                if iSphere - 1 < moons.count
+                {
+                    //print(moons.count)
+                    //print(iSphere)
+                    curName = moons[iSphere-1]
+                }
+                else
+                {
+                    curName = names[iSphere]
+                }
+                
                 let count = curName.count
                 
                 if count % 2 != 0
@@ -228,8 +297,8 @@ class GameViewController: NSViewController
                 //sphereMaterial.diffuse.contents = NSColor.yellow
                 sphereMaterial.locksAmbientWithDiffuse = true
                 sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
-                let textures = ["world.png", "multicolor.png", "fireworks.png"]
-                sphereMaterial.diffuse.contents = textures[iSphere % 3]
+                let textures = ["world.png", "multicolor.png", "fireworks.png", "orange.png", "redblue.png", "creamcicle.png", "greenblue.png", "world.png", "multicolor.png", "fireworks.png"]
+                sphereMaterial.diffuse.contents = textures[iSphere]
                 sphereGeometry.materials = [sphereMaterial]
                 let sphere1 = SCNNode(geometry: sphereGeometry)
                 let text = SCNNode(geometry: textGeometry)
@@ -251,35 +320,16 @@ class GameViewController: NSViewController
                 
                 text.position = SCNVector3(x: CGFloat(letterShift), y: CGFloat(radius - 1), z: 0)
                 
-                speed -= (numPlanets/5)
+                speed -= (numPlanets)
                 radius += 0.008
                 helper.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 3, z: 0, duration: Double(speed))))
                 //text.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 3, z: 0, duration: Double(0.4))))
             }
         }
         
-    }
+    }*/
     
-    
-    // Mouse Events
-    /*
-    override func mouseDown(with event: NSEvent)
-    {
-        if event.associatedEventsMask.contains(NSEvent.EventType.leftMouseDown)
-        {
-            
-        }
-    }
-    
-    override func mouseMoved(with event: NSEvent)
-    {
-        
-    }
-    */
-    
-    //override func sceneviewcli
-    
-    
+
     // for when user clicks something we check if it was on a planet or file
     @objc func sceneViewClicked(recognizer: NSClickGestureRecognizer)
     {
@@ -302,55 +352,123 @@ class GameViewController: NSViewController
                 }
             }
         }
+
+    }
+    
+    func spawnShape()
+    {
+        // 1
+        var geometry:SCNGeometry
         
+        geometry = SCNSphere(radius: 1)
+        
+        geometry.materials.first?.diffuse.contents = NSColor.yellow
+        
+        // 4
+        let geometryNode = SCNNode(geometry: geometry)
+        geometryNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        
+        // 1
+        let randomX = Float.random(in: -45..<2)
+        let randomY = Float.random(in: 10..<18)
+        // 2
+        let force = SCNVector3(x: CGFloat(randomX), y: CGFloat(randomY) , z: 0)
+        // 3
+        let position = SCNVector3(x: 0, y: 0, z: -150)
+        // 4
+        geometryNode.physicsBody?.applyForce(force, at: position, asImpulse: true)
+        
+        // 5
+        scene.rootNode.addChildNode(geometryNode)
+    }
+
+    func createStars()
+    {
+        var x = 0
+        var y = 0
+        var z = 0
+        var duration = 10.0
+        
+        for i in 1...3000
+        {
+            
+            x = Int(Double(Float.random(in: Float(-200)..<Float(200))))
+            y = Int(Double(Float.random(in: Float(-50)..<Float(50))))
+            z = Int(Double(Float.random(in: Float(-200)..<Float(100))))
+            
+            
+            let sphereGeometry = SCNSphere(radius: CGFloat(0.1))
+            
+            let sphereMaterial = SCNMaterial()
+            sphereMaterial.diffuse.contents = NSColor.yellow
+            sphereMaterial.locksAmbientWithDiffuse = true
+            sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
+            sphereMaterial.diffuse.contents = "starcolor2.png"
+            sphereGeometry.materials = [sphereMaterial]
+            let sphere1 = SCNNode(geometry: sphereGeometry)
+            
+            scene.rootNode.addChildNode(sphere1)
+            sphere1.position = SCNVector3(x: CGFloat(x), y: CGFloat(y), z: CGFloat(z))
+            if i % 5 == 0
+            {
+                sphere1.runAction(SCNAction.scale(by: CGFloat(0.5), duration: 5))
+                duration += 0.01
+            }
+        }
         
     }
     
 }
 
-
-class FSContainer
-{
-    init(root: FSNode) {
-        // start with nothing
-        self.root = root
-    }
-    var root: FSNode
-    
-    // cwd determined by calling function either in initial build or by scene name, which is named after the path
-    // user double clicks on a directory planet, game opens new scene of that name
-    func add(cwd: String, x: Float, y: Float, z: Float, children: [FSNode], name: String, kind: String)
-    {
-        // create a new FSNode, naming it internally based on the cwd, ie cwd_<name>
-        
-        
-        // find the directory on the path of the cwd and add the node
-    }
-    
-    // returns an FSNode
-    func findNode(name: String, parentName: String)
-    {
-        
-    }
-    
-    
-    func _getDirectory(dir: String, parent: String)
-    {
-        
+extension GameViewController: SCNSceneRendererDelegate {
+    // 2
+    func renderer(renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        // 3
+        spawnShape()
     }
 }
 
 class FSNode
 {
-    init(x: Float, y: Float, z: Float, children: [FSNode], name: String, kind: String, parent: FSNode, path: String) {
+    init(x: Float, y: Float, z: Float, name: String, kind: String, path: String, level: Int) {
         self.x = x
         self.y = y
         self.z = z
-        self.children = children
         self.kind = kind
         self.name = name       // name displayed to user
-        self.parent = parent
         self.path = path       // name in scene
+        self.children = []
+        
+        if level == levelMax{return}
+        // check if it has children by getting the list of items at that file path
+        var children = getCDContents(path: path, full: false)
+        
+        // if children
+        if children.count > 0
+        {
+            for c in children
+            {
+                // get the file type of the child
+                var fileType = getFileType(path: path + "/" + c)
+                
+                // if it's not a directory, get the extension
+                if fileType != "NSFileTypeDirectory"
+                {
+                    var myStringArr = fileType.components(separatedBy: ".")
+                    //print(myStringArr)
+                    //print(myStringArr.count)
+                    if myStringArr.count >= 2
+                    {
+                        fileType = myStringArr[1]
+                    }
+                }
+                
+                // make a node
+                let newFSNode = FSNode(x: 0, y: 0, z: 0, name: c, kind: fileType, path: path + "/" + c, level: level + 1)
+                // add to array
+                self.children.append(newFSNode)
+            }
+        }
     }
     
     var kind: String
@@ -368,23 +486,95 @@ class FSNode
     }
 }
 
+
+func getCDContents(path: String, full: Bool) -> Array<String>
+{
+    let fullContents = getContentsAtPath(path: path)
+    if fullContents.count == 0
+    {
+        if path == "/Users/nicoleolson"
+        {
+            print("Unable to get contents at root. Exiting ... ")
+            return fullContents
+        }
+    }
+        
+    if full {return fullContents}
+    else
+    {
+        let filteredContents = getLSContents(fullContents: fullContents)
+        return filteredContents
+    }
+}
+
+
+// helping function
 func getContentsAtPath(path: String) -> Array<String>
 {
-    var files = [""]
+    var files = [String]()
     let fileManager = FileManager.default
-    
-    // Get contents in directory: '.' (current one)
     
     do {
         files = try fileManager.contentsOfDirectory(atPath: path)
         
-        print(files)
-        
-        //return files
+        //print(files)
+        //print("successfully got files at " + path)
+        return files
     }
     catch let error as NSError {
-        print("Ooops! Something went wrong: \(error)")
+        //print("Ooops! Something went wrong: \(error)")
+        files = []
+        //print("Error getting files at " + path)
+        return files
     }
-    
-    return files
 }
+
+// helper function filters out directory contents that start with "."
+func getLSContents(fullContents: Array<String>) -> Array<String>
+{
+    var refinedContents = [String]()
+    for content in fullContents{ if content.first != "."{refinedContents.append(content)}}
+    return refinedContents
+}
+
+// helper to get file type
+func getFileType(path: String) -> String
+{
+    let fileManager = FileManager.default
+    let attributes = try! fileManager.attributesOfItem(atPath: path)
+    let type = attributes[.type] as! String
+    //var type = attributes.fileType();
+    //print(type)
+    return type
+}
+
+//func getRandom(min: Double, max: Double)
+//{
+    
+//}
+
+// returns the proximity between the incoming point to other points
+//func checkProximity(x: Double, y: Double, z: Double, otherPoints: Array<Location>) -> Double
+//{
+//    return 0.0
+//}
+
+// Mouse Events
+/*
+ override func mouseDown(with event: NSEvent)
+ {
+ if event.associatedEventsMask.contains(NSEvent.EventType.leftMouseDown)
+ {
+ 
+ }
+ }
+ 
+ override func mouseMoved(with event: NSEvent)
+ {
+ 
+ }
+ */
+
+//override func sceneviewcli
+
+
