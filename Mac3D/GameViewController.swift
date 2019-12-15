@@ -28,7 +28,13 @@ struct IllustratedDirectory
     var min_x:Double
     var max_z:Double
     var min_z:Double
-    //var level = 0
+    var moonLocations: Array<Location> // moons orbit but we want to not put other things on their path
+}
+
+struct LevelIllusration
+{
+    var level: Int
+    var illustratedDirectories: Array<IllustratedDirectory>
 }
 
 class GameViewController: NSViewController
@@ -57,9 +63,7 @@ class GameViewController: NSViewController
         var non_directory_names = [String]()
         var child_directory_names = [String]()
         var child_non_directory_names = [String]()
-        var directory_locations = [Location]()
-        var child_directory_locations = [Location]()
-        
+
         for c in children
         {
             if c.kind == "NSFileTypeDirectory"
@@ -85,8 +89,6 @@ class GameViewController: NSViewController
             else{non_directory_names.append(c.name)}
         }
     }
-    
-    
     
     func setupScene()
     {
