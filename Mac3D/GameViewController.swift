@@ -11,31 +11,12 @@ import SceneKit
 import AppKit
 import Foundation
 
-var levelMax = 3
+var level_max = 3
 let rootPath = "/Users/nicoleolson"
+let sun_radius = 7.0
+let dir_radius = 3.0
+let moon_radius = 0.5
 
-// to represent locations of planets
-struct Location {
-    var x:Double
-    var y:Double
-    var z:Double
-}
-
-struct IllustratedDirectory
-{
-    var center:Location
-    var max_x:Double
-    var min_x:Double
-    var max_z:Double
-    var min_z:Double
-    var moonLocations: Array<Location> // moons orbit but we want to not put other things on their path
-}
-
-struct LevelIllusration
-{
-    var level: Int
-    var illustratedDirectories: Array<IllustratedDirectory>
-}
 
 class GameViewController: NSViewController
 {
@@ -51,287 +32,37 @@ class GameViewController: NSViewController
     {
         super.viewDidLoad()
         initSpaceView()
-        setupScene()
-        // setupNodes()
     }
     
     // uses FSNodes to construct scene
     func initSpaceView()
     {
-        let children = root.children
-        var directory_names = [String]()
-        var non_directory_names = [String]()
-        var child_directory_names = [String]()
-        var child_non_directory_names = [String]()
-
-        for c in children
-        {
-            if c.kind == "NSFileTypeDirectory"
-            {
-                directory_names.append(c.name)
-                // get the moons of the directories
-                let dir_children = c.children
-                
-                for d_c in dir_children
-                {
-                    if d_c.kind == "NSFileTypeDirectory"
-                    {
-                        child_directory_names.append(d_c.name)
-                    }
-                    else
-                    {
-                        child_non_directory_names.append(d_c.name)
-                    }
-                }
-                
-            }
-                
-            else{non_directory_names.append(c.name)}
-        }
+        setupScene()
     }
     
     func setupScene()
     {
         sceneView = self.view as? SCNView
         sceneView.allowsCameraControl = true // allows you to look around the scene
-        scene = SCNScene(named: "space.scn")
-        sceneView.scene = scene
-        sceneView.delegate = self // sets the delegate of the Scene Kit view to self. So that the view can call the delegate methods that are implemented in GameViewController
+        scene = illustrate(node: root)
         
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        cameraNode.camera?.zFar = 10000000
+        cameraNode.position = SCNVector3Make(0, 0, 100) // need to make last value dynamic
+        scene.rootNode.addChildNode(cameraNode)
+        
+        sceneView.scene = scene // when the scene changes you change this on the sceneView
+        sceneView.delegate = self // sets the delegate of the Scene Kit view to self. So that the view can call the
+        sceneView.pointOfView = cameraNode
+ 
         let dehClickies = NSClickGestureRecognizer()
         dehClickies.action = #selector(GameViewController.sceneViewClicked(recognizer:))
         sceneView.gestureRecognizers = [dehClickies]
         createStars()
     }
     
-    // each "scene"
-    /*func setupNodes()
-    {
-        let contents = getCDContents(path: rootPath, full: false) // must be user variable eventually
-        
-        var xCent = 0.0
-        var zCent = 0.0
-        var count = 0
-        var xDirlocations = [Float]()
-        var zDirlocations = [Float]()
-        
-        for dir in contents
-        {
-            var curPath = rootPath + "/" + dir
-            let moons = getCDContents(path: curPath, full: false)
-            //print("contents at " + curPath)
-            //print(moons)
-            
-            
-            for iSphere in 1...Int(contents.count) - 1
-            {
-                // compute the location of the current planet
-                // draw numbers until we find a unique place
-                var found = false
-
-                while found == false
-                {
-                    xCent = Double(Float.random(in: Float(-45)..<Float(120)))
-                    zCent = Double(Float.random(in: Float(-120)..<Float(5)))
-                    
-                    if xDirlocations.count > 0
-                    {
-                        var foundTooClose = false
-                        for i in 0...xDirlocations.count - 1
-                        {
-                            let xPos = xDirlocations[i]
-                            
-                            if abs(Double(xPos) - xCent) < 3
-                            {
-                                foundTooClose = true
-                                //print("to close")
-                                break
-                            }
-                        }
-                        if !foundTooClose
-                        {
-                            found = true
-                        }
-                    }
-                    else // there are no planets placed yet
-                    {
-                        found = true
-                    }
-                }
-            }
-            
-            // now that we've found a place
-            xDirlocations.append(Float(xCent))
-            zDirlocations.append(Float(zCent))
-            
-            //print(dir)
-            let sizeOfDir = dir.count
-            let offsetLetter = sizeOfDir / 2
-            
-            let textMaterial = SCNMaterial()
-            textMaterial.ambient.contents = NSColor.blue
-            textMaterial.diffuse.contents = NSColor.white
-            textMaterial.specular.contents = NSColor.red
-            textMaterial.lightingModel = SCNMaterial.LightingModel.physicallyBased
-            textMaterial.shininess = 0.5
-            
-            let sphereGeometry = SCNSphere(radius: CGFloat(1))
-            let textGeometry = SCNText(string: dir, extrusionDepth: CGFloat(0))
-            textGeometry.font = NSFont(name: "Courier New",size: 0.5)
-            textGeometry.materials = [textMaterial]
-            textGeometry.firstMaterial?.diffuse.contents = NSColor.green
-            let sphereMaterial = SCNMaterial()
-            //sphereMaterial.diffuse.contents = NSColor.yellow
-            sphereMaterial.locksAmbientWithDiffuse = true
-            sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
-            sphereMaterial.diffuse.contents = NSColor.gray
-            sphereGeometry.materials = [sphereMaterial]
-            let centerNode = SCNNode(geometry: sphereGeometry)
-            let text = SCNNode(geometry: textGeometry)
-            
-            centerNode.addChildNode(text)
-            scene.rootNode.addChildNode(centerNode)
-            centerNode.position = SCNVector3(x: CGFloat(xCent), y: 0, z: CGFloat(zCent))
-            centerNode.position = SCNVector3(x: CGFloat(xCent), y: 0, z: CGFloat(zCent))
-
-            count += 1
-            text.position = SCNVector3(x: CGFloat(-0.6 * Float(offsetLetter)), y: CGFloat(0.4), z: 0)
-            
-            var names = ["/Folder1", "/Folder2", "/Folder3", "/Folder4", "/Folder5", "/Folder6", "/Folder7", "/Folder8", "/Folder9", "/Folder10"]
-            
-            let numPlanets = Double(names.count)
-            
-            var speed = 300.0
-            let xMin = 1.0
-            let xMax = numPlanets/3
-            let zMin = 1.0
-            let zMax = numPlanets/3
-            var radius = 0.2
-            let letterWidth = 0.07 // divide letter count by 2 and then x: -0.07 * result
-            let halfLetterWidth = letterWidth/2.0
-            var curName = ""
-            var uneven = false
-            var xlocations = [Float]()
-            var zlocations = [Float]()
-            
-            for iSphere in 1...Int(numPlanets) - 1
-            {
-                // compute the location of the current planet
-                // draw numbers until we find a unique place
-                var found = false
-                var xPlace = 0.0
-                var zPlace = 0.0
-                while found == false
-                {
-                    xPlace = Double(Float.random(in: Float(xMin)..<Float(xMax)))
-                    zPlace = Double(Float.random(in: Float(zMin)..<Float(zMax)))
-                    
-                    if iSphere % 2 == 0
-                    {
-                        xPlace *= -1.0
-                    }
-                    if iSphere % 3 == 0
-                    {
-                        zPlace *= -1.0
-                    }
-                    
-                    if xlocations.count > 0
-                    {
-                        var foundTooClose = false
-                        for i in 0...xlocations.count - 1
-                        {
-                            let xPos = xlocations[i]
-                            let zPos = zlocations[i]
-                            
-                            if abs(Double(xPos) - xPlace) < radius + 0.05
-                            {
-                                foundTooClose = true
-                                break
-                            }
-                        }
-                        if !foundTooClose
-                        {
-                            found = true
-                        }
-                    }
-                    else // there are no planets placed yet
-                    {
-                        found = true
-                    }
-                }
-                
-                // now that we've found a place
-                xlocations.append(Float(xPlace))
-                zlocations.append(Float(zPlace))
-                
-                
-                if iSphere - 1 < moons.count
-                {
-                    //print(moons.count)
-                    //print(iSphere)
-                    curName = moons[iSphere-1]
-                }
-                else
-                {
-                    curName = names[iSphere]
-                }
-                
-                let count = curName.count
-                
-                if count % 2 != 0
-                {
-                    uneven = true
-                }
-                
-                var letterShift = -(Double(count / 2) * letterWidth)
-                if uneven
-                {
-                    letterShift -= halfLetterWidth
-                }
-                // reset
-                uneven = false
-                let sphereGeometry = SCNSphere(radius: CGFloat(radius))
-                let textGeometry = SCNText(string: curName, extrusionDepth: CGFloat(0))
-                textGeometry.font = NSFont(name: "Courier New",size: 0.1)
-                textGeometry.materials = [textMaterial]
-                textGeometry.firstMaterial?.diffuse.contents = NSColor.green
-                let sphereMaterial = SCNMaterial()
-                //sphereMaterial.diffuse.contents = NSColor.yellow
-                sphereMaterial.locksAmbientWithDiffuse = true
-                sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
-                let textures = ["world.png", "multicolor.png", "fireworks.png", "orange.png", "redblue.png", "creamcicle.png", "greenblue.png", "world.png", "multicolor.png", "fireworks.png"]
-                sphereMaterial.diffuse.contents = textures[iSphere]
-                sphereGeometry.materials = [sphereMaterial]
-                let sphere1 = SCNNode(geometry: sphereGeometry)
-                let text = SCNNode(geometry: textGeometry)
-                let helper = SCNNode()
-                helper.position = center
-                
-                scene.rootNode.addChildNode(sphere1)
-                sphere1.addChildNode(text)
-                scene.rootNode.addChildNode(helper)
-                scene.rootNode.addChildNode(text)
-                centerNode.addChildNode(sphere1)
-                centerNode.addChildNode(helper)
-                helper.addChildNode(sphere1)
-                sphere1.addChildNode(text)
-                
-                
-                sphere1.position = SCNVector3(x: CGFloat(xPlace), y: 0, z: -CGFloat(zPlace))
-                
-                
-                text.position = SCNVector3(x: CGFloat(letterShift), y: CGFloat(radius - 1), z: 0)
-                
-                speed -= (numPlanets)
-                radius += 0.008
-                helper.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 3, z: 0, duration: Double(speed))))
-                //text.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 3, z: 0, duration: Double(0.4))))
-            }
-        }
-        
-    }*/
-    
-
+ 
     // for when user clicks something we check if it was on a planet or file
     @objc func sceneViewClicked(recognizer: NSClickGestureRecognizer)
     {
@@ -399,7 +130,7 @@ class GameViewController: NSViewController
             z = Int(Double(Float.random(in: Float(-200)..<Float(100))))
             
             
-            let sphereGeometry = SCNSphere(radius: CGFloat(0.1))
+            let sphereGeometry = SCNSphere(radius: CGFloat(0.01))
             
             let sphereMaterial = SCNMaterial()
             sphereMaterial.diffuse.contents = NSColor.yellow
@@ -429,65 +160,6 @@ extension GameViewController: SCNSceneRendererDelegate {
         spawnShape()
     }
 }
-
-class FSNode
-{
-    init(x: Float, y: Float, z: Float, name: String, kind: String, path: String, level: Int) {
-        self.x = x
-        self.y = y
-        self.z = z
-        self.kind = kind
-        self.name = name       // name displayed to user
-        self.path = path       // name in scene
-        self.children = []
-        
-        if level == levelMax{return}
-        // check if it has children by getting the list of items at that file path
-        var children = getCDContents(path: path, full: false)
-        
-        // if children
-        if children.count > 0
-        {
-            for c in children
-            {
-                // get the file type of the child
-                var fileType = getFileType(path: path + "/" + c)
-                
-                // if it's not a directory, get the extension
-                if fileType != "NSFileTypeDirectory"
-                {
-                    var myStringArr = fileType.components(separatedBy: ".")
-                    //print(myStringArr)
-                    //print(myStringArr.count)
-                    if myStringArr.count >= 2
-                    {
-                        fileType = myStringArr[1]
-                    }
-                }
-                
-                // make a node
-                let newFSNode = FSNode(x: 0, y: 0, z: 0, name: c, kind: fileType, path: path + "/" + c, level: level + 1)
-                // add to array
-                self.children.append(newFSNode)
-            }
-        }
-    }
-    
-    var kind: String
-    var name: String
-    var path: String
-    var x: Float
-    var y: Float
-    var z: Float
-    var children: [FSNode] = []
-    weak var parent: FSNode? // may not be necessary given the "path" var
-    
-    func addChild(node: FSNode)
-    {
-        self.children.append(node)
-    }
-}
-
 
 func getCDContents(path: String, full: Bool) -> Array<String>
 {
@@ -550,17 +222,6 @@ func getFileType(path: String) -> String
     return type
 }
 
-//func getRandom(min: Double, max: Double)
-//{
-    
-//}
-
-// returns the proximity between the incoming point to other points
-//func checkProximity(x: Double, y: Double, z: Double, otherPoints: Array<Location>) -> Double
-//{
-//    return 0.0
-//}
-
 // Mouse Events
 /*
  override func mouseDown(with event: NSEvent)
@@ -579,4 +240,374 @@ func getFileType(path: String) -> String
 
 //override func sceneviewcli
 
+// creates a scene where the input is the "sun" and the children if dir: are planets with moons else: not illsutrateed yet
+// adds the new illustration to Scenes struct
+// returns the new Scene object, which has the "scene" that can be used to set the view
+func illustrate(node: FSNode) -> SCNScene // change to class "Scene"
+{
+    var total_diameter = Double(0)
+    // scene has camera
+    let scene = SCNScene(named: "space.scn")
+    // put a sun in the center
+    let sun = makePlanet(name: "Root", texture_type: "image", texture: "sun.png", radius: Float(sun_radius))
+    scene?.rootNode.addChildNode(sun)
+    sun.position = SCNVector3(x: 0, y: 0, z: 0)
+    var textures = ["world.png", "multicolor.png", "orange.png", "creamcicle.png"]
+    
+    //corresponds with above
+    var x_min = Double(19)
+    //var z_min = Double(5)
+    
+    var count = 0
+    // for each child of root node
+    for child in node.children
+    {
+        count += 1
+        if count == 5 { count = 1 }
+        
+        // if directory it needs moons
+        if child.kind == "NSFileTypeDirectory"
+        {
+            // create a planet
+            let planet = makePlanet(name: child.name, texture_type: "solid", texture: "NSgray", radius: Float(dir_radius))
+            sun.addChildNode(planet) // I don't know why I need to ? here
+            
+            // get a count of the moons
+            let num_children = child.children.count
+            
+            // calculate the space needed to illustrate
+            // (radius of subdirs are 0.2, need 0.2 between them, and then another 1 for spacing between)
+            let diameter = Double(2.0 * (Float(num_children) * 0.6)) + Double(8)
+            
+            // use diameter to calculte the distance from the sun that the center of the planet needs to be
+            let distance_from_sun = x_min + (diameter / Double(2))
+            
+            // make a torus at that distance
+            let torus = makeTorus(distance_from_sun: distance_from_sun)
+            scene?.rootNode.addChildNode(torus)
+            
+            // advance x_min for next planet
+            x_min += diameter
+            
+            let start_x: Double
+            let start_z: Double
+            var a = Double(0)
+            
+            if count == 1 {a = Double(Float.random(in: Float(0)..<Float(85)))}
+    
+            if count == 2 {a = Double(Float.random(in: Float(95)..<Float(175)))}
+  
+            if count == 3 {a = Double(Float.random(in: Float(185)..<Float(265)))}
+ 
+            if count == 4 {a = Double(Float.random(in: Float(275)..<Float(355)))}
 
+            start_x = 0 + distance_from_sun * cos(a) // x = cx + r * cos(a)
+            start_z = 0 + distance_from_sun * sin(a) // y = cy + r * sin(a)
+            
+            // now we know where the planet starts
+            planet.position = SCNVector3(x: CGFloat(start_x), y: 0, z: CGFloat(start_z))
+            
+            // create a text node
+            let text_node = makeText(text: child.name, size: 2)
+            planet.addChildNode(text_node)
+            
+            // position the text
+            let x_offset = calculateTextOffset_X(length: child.name.count, size: 0.5)
+            let y_offset = calculateTextOffset_Y(radius: Double(dir_radius))
+            
+            text_node.position = SCNVector3(x: CGFloat(x_offset), y: CGFloat(y_offset), z: 0)
+            
+            // if there are moons
+            if num_children > 0
+            {
+                var inner_count = 0
+                var distance_from_planet = 5.0
+                var duration = 5.0
+                for moons in child.children
+                {
+                    duration += 0.05
+                    inner_count += 1
+                    if inner_count > 4 {inner_count = 1}
+                    //var distance_from_planet = 5.0
+                    // create a helper
+                    let helper = SCNNode() // need to set size?
+                    helper.position = SCNVector3(x:0,y:0,z:0)
+                    
+                    let moon = makePlanet(name: child.name, texture_type: "image", texture: textures[inner_count - 1], radius: Float(moon_radius))
+                    scene?.rootNode.addChildNode(moon)
+                    scene?.rootNode.addChildNode(helper)
+                    // --- add text node here ---
+                    
+                    planet.addChildNode(moon)
+                    planet.addChildNode(helper)
+                    helper.addChildNode(moon)
+                    //  --- add text node here ---
+                    
+                    let start_x: Double
+                    let start_z: Double
+                    var a = Double(0)
+                    
+                    if inner_count == 1 {a = Double(Float.random(in: Float(0)..<Float(85)))}
+                    
+                    if inner_count == 2 {a = Double(Float.random(in: Float(95)..<Float(175)))}
+                    
+                    if inner_count == 3 {a = Double(Float.random(in: Float(185)..<Float(265)))}
+                    
+                    if inner_count == 4 {a = Double(Float.random(in: Float(275)..<Float(355)))}
+                    
+                    start_x = 0 + distance_from_planet * cos(a) // x = cx + r * cos(a)
+                    start_z = 0 + distance_from_planet * sin(a) // y = cy + r * sin(a)
+                    distance_from_planet += 0.5
+                    // now we know where the planet starts
+                    moon.position = SCNVector3(x: CGFloat(start_x), y: 0, z: CGFloat(start_z))
+                    
+                    // create a text node
+                    //let text_node = makeText(text: child.name, size: 0.5)
+                    //moon.addChildNode(text_node)
+                    
+                    // position the text
+                    //let x_offset = calculateTextOffset_X(length: child.name.count, size: 0.5)
+                    //let y_offset = calculateTextOffset_Y(radius: Double(dir_radius))
+                    
+                    //text_node.position = SCNVector3(x: CGFloat(x_offset), y: CGFloat(y_offset), z: 0)
+                    helper.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 3, z: 0, duration: Double(duration))))
+                }
+            }
+        }
+        
+        //total_diameter += x_min
+        //required_depth = total_diameter
+        
+        // added later
+        // it's not a directory, so it does not need moons
+        //else
+        //{
+        //
+        //}
+    }
+
+    return scene!
+   
+    // eventually return a scene object which is used to get the scene and store all illustrated scenes
+    // lastly, initialize the object and return
+    // let new_scene = Scene()
+}
+
+// helper function: create a planet node -> SCNNode
+func makePlanet(name: String, texture_type: String, texture: String, radius: Float) -> SCNNode
+{
+    let sphere_geometry = SCNSphere(radius: CGFloat(radius))
+    let sphere_material = SCNMaterial()
+    sphere_material.locksAmbientWithDiffuse = true
+    sphere_material.lightingModel = SCNMaterial.LightingModel.blinn
+    if texture_type == "solid"
+    {
+        if texture == "NSgray"{sphere_material.diffuse.contents = NSColor.gray}
+        sphere_material.diffuse.contents = NSColor.gray
+    }
+    else if texture_type == "image" {sphere_material.diffuse.contents = texture}
+    
+    //sphere_material.diffuse.contents = NSColor.gray
+    sphere_geometry.materials = [sphere_material]
+    let dir_node = SCNNode(geometry: sphere_geometry)
+    
+    return dir_node
+    
+}
+
+func makeText(text: String, size: Float) -> SCNNode
+{
+    let text_material = SCNMaterial()
+    text_material.ambient.contents = NSColor.blue
+    text_material.diffuse.contents = NSColor.white
+    text_material.specular.contents = NSColor.red
+    text_material.lightingModel = SCNMaterial.LightingModel.physicallyBased
+    text_material.shininess = 0.5
+    let text_geometry = SCNText(string: text, extrusionDepth: CGFloat(0))
+    text_geometry.font = NSFont(name: "Courier New",size: CGFloat(size))
+    text_geometry.materials = [text_material]
+    text_geometry.firstMaterial?.diffuse.contents = NSColor.green
+    return SCNNode(geometry: text_geometry)
+}
+
+func makeTorus(distance_from_sun: Double) -> SCNNode
+{
+    let torus_geometry = SCNTorus(ringRadius: CGFloat(distance_from_sun), pipeRadius: CGFloat(0.01))
+    let torus_material = SCNMaterial()
+    torus_material.transparency = 0.03 // attempt to make it transparent
+    torus_geometry.materials = [torus_material]
+    return SCNNode(geometry: torus_geometry)
+}
+
+// helper function to calculate the text offset based on font size and number of letters
+// function is a work in progress
+func calculateTextOffset_X(length: Int, size: Float) -> Float
+{
+    //-0.6 //0.07 // divide letter count by 2 and then x: -0.07 * result
+    let halfLetterWidth = Double(length)/2.0
+    
+    if size == 0.5
+    {
+        return Float(-0.6 * halfLetterWidth)
+    }
+    
+    return 0.0 // change
+}
+
+func calculateTextOffset_Y(radius: Double) -> Double
+{
+    if radius == 3
+    {
+        return 2.4
+    }
+    
+    return 0
+}
+
+
+
+
+// ---------------------------- Structs and Classes ------------------------ //
+
+struct Location
+{
+    var x:Double
+    var y:Double
+    var z:Double
+}
+
+struct Planet
+{
+    var moons: Array<SCNNode> = [] // moons of the planet
+    var location: Location
+}
+
+struct Moon
+{
+    var moon: SCNNode
+    var type: String // file or directory (determines what happens upon click)
+    var location: Location
+}
+
+struct IllustratedDirectory
+{
+    var sun:SCNNode?  // sun is placed -x, z = 0, y = 0, x determined based on size of directory
+    var max_x:Double? // used for placing stars at the edge of the scene
+    var min_x:Double?
+    var max_z:Double?
+    var min_z:Double?
+    var planets: Array<Planet> // planets have moons
+    var stars: Array<SCNNode>
+}
+
+struct PathIllusration
+{
+    var path: String
+    var illustrated_directories: Array<IllustratedDirectory>
+}
+
+// all scenes that have been illustrated
+struct Scenes
+{
+    var scenes: Array<Scene>
+}
+
+
+// Init of an FSNode includes recursive call to create children up to level defined in global "maxLevel"
+class FSNode
+{
+    init(x: Float, y: Float, z: Float, name: String, kind: String, path: String, level: Int) {
+        self.x = x
+        self.y = y
+        self.z = z
+        self.kind = kind
+        self.name = name       // name displayed to user
+        self.path = path       // name in scene
+        self.children = []
+        self.scene = nil       // set after tree is built
+        
+        if level == level_max{return}
+        // check if it has children by getting the list of items at that file path
+        let children = getCDContents(path: path, full: false)
+        
+        // if children
+        if children.count > 0
+        {
+            for c in children
+            {
+                // get the file type of the child
+                var fileType = getFileType(path: path + "/" + c)
+                
+                // if it's not a directory, get the extension
+                if fileType != "NSFileTypeDirectory"
+                {
+                    var myStringArr = fileType.components(separatedBy: ".")
+                    //print(myStringArr)
+                    //print(myStringArr.count)
+                    if myStringArr.count >= 2
+                    {
+                        fileType = myStringArr[1]
+                    }
+                }
+                
+                // make a node
+                let newFSNode = FSNode(x: 0, y: 0, z: 0, name: c, kind: fileType, path: path + "/" + c, level: level + 1)
+                newFSNode.parent = self
+                // add to array
+                self.children.append(newFSNode)
+            }
+        }
+    }
+    
+    var kind: String
+    var name: String
+    var path: String
+    var x: Float
+    var y: Float
+    var z: Float
+    var children: [FSNode] = []
+    weak var parent: FSNode? // may not be necessary given the "path" var
+    weak var scene: Scene?
+    
+    // add the illustration object
+    func addScene(scene: Scene)
+    {
+        self.scene = scene
+    }
+}
+
+// Scene objects hold an entire illustrated scene at a specified path
+class Scene
+{
+    var scene: SCNScene
+    var illustration: IllustratedDirectory
+    
+    init(scene: SCNScene, illustration: IllustratedDirectory)
+    {
+        self.scene = scene
+        self.illustration = illustration
+    }
+    
+}
+
+/*
+ Reference for adding text nodes to moons (for ordering)
+ let helper = SCNNode()
+ helper.position = center
+ 
+ scene.rootNode.addChildNode(sphere1)
+ sphere1.addChildNode(text)
+ scene.rootNode.addChildNode(helper)
+ scene.rootNode.addChildNode(text)
+ centerNode.addChildNode(sphere1)
+ centerNode.addChildNode(helper)
+ helper.addChildNode(sphere1)
+ sphere1.addChildNode(text)
+ 
+ 
+ sphere1.position = SCNVector3(x: CGFloat(xPlace), y: 0, z: -CGFloat(zPlace))
+ 
+ 
+ text.position = SCNVector3(x: CGFloat(letterShift), y: CGFloat(radius - 1), z: 0)
+ 
+*/
