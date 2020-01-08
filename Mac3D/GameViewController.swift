@@ -12,7 +12,7 @@ import AppKit
 import Foundation
 
 var depth_init = 3
-let root_path = "/Users/nicoleolson"
+let root_path = "/"
 let sun_radius = 64.0
 let dir_radius = 20.0
 let moon_radius = 1.5
@@ -55,6 +55,7 @@ class GameViewController: NSViewController
     
     func changeScene(node: FSNode)
     {
+        print("Changing scene .. ")
         if sceneExists(path: node.path)
         {
             let scene = retrieveScene(path: node.path)
@@ -149,30 +150,51 @@ class GameViewController: NSViewController
                     if check.count > 1
                     {
                         var path_arr = node.name!.components(separatedBy: "/")
-                        var path = ""
-                        for p in path_arr{ if p != "" && p != "sun" {path += ("/" + p)}}
-                        if path == "/Users/nicoleolson" {return}
-                        path_arr = path.components(separatedBy: "/")
-                        path_arr.removeFirst()
-                        path_arr.removeLast()
-                        path = ""
-                        for p in path_arr{ path += ("/" + p)}
-                        fs_node = findNode(new_root_path: path, root: root)
+                        path_arr = removeEmptyInStringArray(str_arr: path_arr)
+                        if path_arr[path_arr.count - 1 ] == "sun"
+                        {
+                            // remove the last two
+                            path_arr.remove(at: path_arr.count-1)
+                            path_arr.remove(at: path_arr.count-1)
+                            
+                            // build the path
+                            var path = ""
+                            for p in path_arr{ path += ("/" + p)}
+                            fs_node = findNode(new_root_path: path, root: root)
+                        }
+                        else
+                        {
+                            var path = ""
+                            for p in path_arr{ if p != "" && p != "sun" {path += ("/" + p)}}
+                            if path == "/" {return}
+                            fs_node = findNode(new_root_path: path, root: root)
+                        }
                     }
                     else {fs_node = findNode(new_root_path: node.name!, root: root)}
                     print(fs_node.name)
                     if fs_node.kind == "NSFileTypeDirectory"
                     {
                         print("User clicked " + fs_node.name)
-                        changeScene(node: fs_node)
+                        
+                        // check if the directory ends in ".app"
+                        var name_arr = node.name!.components(separatedBy: ".")
+                        name_arr = removeEmptyInStringArray(str_arr: name_arr)
+                        
+                        if name_arr[name_arr.count-1] == "app"
+                        {
+                            NSWorkspace.shared.openFile(fs_node.path)
+                        }
+                        else
+                        {
+                            changeScene(node: fs_node)
+                        }
                     }
                     
                     // it has a name and a node was located and it's a file
                     else
                     {
                         print("opening . . .")
-                        //NSWorkspace.shared.open(URL(fileURLWithPath: fs_node.name)) // depreciated
-                        NSWorkspace.shared.openFile(fs_node.name, withApplication: "Preview")
+                        NSWorkspace.shared.openFile(fs_node.path) // fs_node files do not have paths as names
                     }
                 }
             }
@@ -239,10 +261,18 @@ func getLSContents(fullContents: Array<String>) -> Array<String>
 // helper to get file type
 func getFileType(path: String) -> String
 {
-    let fileManager = FileManager.default
-    let attributes = try! fileManager.attributesOfItem(atPath: path)
-    let type = attributes[.type] as! String
-    return type
+    do
+    {
+        let fileManager = FileManager.default
+        let attributes = try fileManager.attributesOfItem(atPath: path)
+        let type = attributes[.type] as! String
+        return type
+    }
+    catch
+    {
+        print("could not get file type of " + path)
+        return "None"
+    }
 }
 
 func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
@@ -973,22 +1003,23 @@ func findNode(new_root_path: String, root: FSNode) -> FSNode
     
     if path_dir_arr.count == 0 {return root}
     
-    path_dir_arr.removeFirst(1) // first is ""
+   path_dir_arr = removeEmptyInStringArray(str_arr: path_dir_arr)
     
     var fs_node = root
     
     var root_paths = root.path.components(separatedBy: "/")
     
-    root_paths.removeFirst(1)
+    root_paths = removeEmptyInStringArray(str_arr: root_paths)
     
     let size = root_paths.count
     
-    if path_dir_arr.count >= root_paths.count {path_dir_arr.removeFirst(size)}
+    //if path_dir_arr.count >= root_paths.count {path_dir_arr.removeFirst(size)}
     var i = 0
-    
+    let _new_root_path = "/" + new_root_path
+    print("Seeking to create: " + _new_root_path)
     if path_dir_arr.count > 0
     {
-        while fs_node.path != new_root_path
+        while fs_node.path != _new_root_path
         {
             // get the children of fs_node
             let children = fs_node.children
@@ -1009,6 +1040,13 @@ func findNode(new_root_path: String, root: FSNode) -> FSNode
     
     return fs_node
 }
+
+func removeEmptyInStringArray(str_arr: Array<String>) -> Array<String>
+{
+    let new_arr = str_arr.filter { $0 != "" }
+    return new_arr
+}
+
 
 // convert path to array of path items
 func getArrFromPath(path: String) -> Array<String>
