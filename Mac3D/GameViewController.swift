@@ -216,7 +216,7 @@ func getCDContents(path: String, full: Bool) -> Array<String>
     let fullContents = getContentsAtPath(path: path)
     if fullContents.count == 0
     {
-        if path == "/Users/nicoleolson"
+        if path == "/"
         {
             print("Unable to get contents at root. Exiting ... ")
             return fullContents
@@ -305,7 +305,7 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
     let dir_count = directories.count
     let astroid_count = files.count
     
-    let astroid_scene1 = SCNScene(named: "xl_astroid.scn")
+    let astroid_scene1 = SCNScene(named: "ba.dae")
     let node = astroid_scene1?.rootNode.childNode(withName: "Sphere", recursively: true)
     //let astroid_scene2 = SCNScene(named: "quarter_asteroid.dae")
     //let node2 = astroid_scene2?.rootNode.childNode(withName: "Cube", recursively: true)
