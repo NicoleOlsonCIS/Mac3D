@@ -172,7 +172,7 @@ class GameViewController: NSViewController
                     {
                         print("opening . . .")
                         //NSWorkspace.shared.open(URL(fileURLWithPath: fs_node.name)) // depreciated
-                        NSWorkspace.shared.openFile(fs_node.name)
+                        NSWorkspace.shared.openFile(fs_node.name, withApplication: "Preview")
                     }
                 }
             }
@@ -383,9 +383,9 @@ func makeDirectories(scene: SCNScene, sun: SCNNode, x_min: Double, directories: 
         
         positionNodeAtDistance(node: planet, distance: distance_from_sun, count: count, hasY: false)
         
-        let text_node = makeText(scene: scene, text: directory.name, size: 16, color: "purple")
+        let text_node = makeText(scene: scene, text: directory.name, size: 20, color: "purple")
         planet.addChildNode(text_node)
-        let x_offset = calculateTextOffset_X(length: directory.name.count, size: 16)
+        let x_offset = calculateTextOffset_X(length: directory.name.count, size: 20)
         let y_offset = calculateTextOffset_Y(radius: Double(dir_radius))
         text_node.position = SCNVector3(x: CGFloat(x_offset), y: CGFloat(y_offset), z: 0)
         texture_count += 1
@@ -484,24 +484,12 @@ func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode,
         
         positionNodeAtDistance(node: new_node, distance: x_s, count: as_count, hasY: false)
         x_s += 2
-        var name = ""
         
-        if astroid.name.count > 12
-        {
-            var count = 1
-            for letter in astroid.name
-            {
-                name = name + String(letter)
-                count = count + 1
-                if count == 12
-                {
-                    name = name + "\n"
-                }
-            }
-        }
+        var name = ""
+        if astroid.name.count > 11 { name = adjustName(name: astroid.name, length: 10) }
         else {name = astroid.name}
         
-        let text_node = makeText(scene: scene, text: name, size: 6, color: "red")
+        let text_node = makeText(scene: scene, text: name, size: 1, color: "red")
         new_node.addChildNode(text_node)
         new_node.addChildNode(text_node)
         
@@ -510,6 +498,36 @@ func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode,
     
     if astroids.count > 0 {x_s += 15} // extra space after the astroid belt
     return x_s
+}
+
+func adjustName(name: String, length: Int) -> String
+{
+    let names = name.split(by: length)
+    
+    var new_name = ""
+    for name in names { new_name = new_name + name + "\n"}
+    
+    return new_name
+}
+
+
+// copied from: https://stackoverflow.com/questions/32212220/how-to-split-a-string-into-substrings-of-equal-length
+extension String
+{
+    func split(by length: Int) -> [String]
+    {
+        var startIndex = self.startIndex
+        var results = [Substring]()
+        
+        while startIndex < self.endIndex
+        {
+            let endIndex = self.index(startIndex, offsetBy: length, limitedBy: self.endIndex) ?? self.endIndex
+            results.append(self[startIndex..<endIndex])
+            startIndex = endIndex
+        }
+        
+        return results.map { String($0) }
+    }
 }
 
 // non-files decorative astroid belt content, do not advance x_min, vary in z for every x of a real file
@@ -937,7 +955,7 @@ func positionNodeAtDistance(node: SCNNode, distance: Double, count: Int, hasY: B
 func calculateTextOffset_X(length: Int, size: Float) -> Float
 {
     let halfLetterWidth = Double(length)/2.0
-    if size == 16 { return Float(-8.5 * halfLetterWidth) }
+    if size == 20 { return Float(-9.5 * halfLetterWidth) }
     else { return Float(-1.1 * halfLetterWidth) }
 }
 
