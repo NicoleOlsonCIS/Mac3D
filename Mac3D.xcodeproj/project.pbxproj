@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		879120E323C6846000A1483C /* ba.dae in Resources */ = {isa = PBXBuildFile; fileRef = 879120E223C6846000A1483C /* ba.dae */; };
+		879120E923C7A51600A1483C /* op_grad_invert.png in Resources */ = {isa = PBXBuildFile; fileRef = 879120E823C7A51600A1483C /* op_grad_invert.png */; };
 		87B7352A23A30DFC001D47BA /* space.scn in Resources */ = {isa = PBXBuildFile; fileRef = 87B7352923A30DFC001D47BA /* space.scn */; };
 		87DDE0F723A02B4100B8D285 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE0F623A02B4100B8D285 /* AppDelegate.swift */; };
 		87DDE0F923A02B4100B8D285 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DDE0F823A02B4100B8D285 /* GameViewController.swift */; };
@@ -76,6 +77,7 @@
 
 /* Begin PBXFileReference section */
 		879120E223C6846000A1483C /* ba.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; name = ba.dae; path = "images/scene images/astroid/ba.dae"; sourceTree = SOURCE_ROOT; };
+		879120E823C7A51600A1483C /* op_grad_invert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = op_grad_invert.png; path = "images/scene images/text/op_grad_invert.png"; sourceTree = SOURCE_ROOT; };
 		87B7352923A30DFC001D47BA /* space.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = space.scn; sourceTree = "<group>"; };
 		87DDE0F323A02B4100B8D285 /* Mac3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mac3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87DDE0F623A02B4100B8D285 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 			children = (
 				87F5282C23C5891200462BC5 /* gp_grad.png */,
 				87F5282B23C5891200462BC5 /* op_grad.png */,
+				879120E823C7A51600A1483C /* op_grad_invert.png */,
 			);
 			path = text;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				87F5283D23C58B6500462BC5 /* m6.png in Resources */,
 				87F5282723C5890000462BC5 /* nebula3.png in Resources */,
 				87F5280B23C588D400462BC5 /* makemake2.png in Resources */,
+				879120E923C7A51600A1483C /* op_grad_invert.png in Resources */,
 				87F5280923C588D400462BC5 /* uranus3.png in Resources */,
 				87F5281123C588D400462BC5 /* venus6.png in Resources */,
 				87F5281F23C588F500462BC5 /* stars.jpg in Resources */,

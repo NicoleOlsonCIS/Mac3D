@@ -80,12 +80,6 @@ class GameViewController: NSViewController
         cameraNode.position = SCNVector3Make(0, 10, 1000) // need to make last value dynamic
         scene.rootNode.addChildNode(cameraNode)
         
-        
-        //let lightnode = SCNNode()
-        //lightnode.light = SCNLight()
-        //lightnode.light!.type = SCNLight.LightType.ambient
-        //scene.rootNode.addChildNode(lightnode)
-
         sceneView.scene = scene // when the scene changes you change this on the sceneView
         sceneView.delegate = self //as! SCNSceneRendererDelegate // sets the delegate of the Scene Kit view to self. So that the view can call the
         sceneView.pointOfView = cameraNode
@@ -145,7 +139,6 @@ class GameViewController: NSViewController
                 if node.name != nil
                 {
                     var fs_node: FSNode
-                    print(node.name!)
                     let check = node.name!.components(separatedBy: "//")
                     if check.count > 1
                     {
@@ -171,7 +164,6 @@ class GameViewController: NSViewController
                         }
                     }
                     else {fs_node = findNode(new_root_path: node.name!, root: root)}
-                    print(fs_node.name)
                     if fs_node.kind == "NSFileTypeDirectory"
                     {
                         print("User clicked " + fs_node.name)
@@ -180,14 +172,8 @@ class GameViewController: NSViewController
                         var name_arr = node.name!.components(separatedBy: ".")
                         name_arr = removeEmptyInStringArray(str_arr: name_arr)
                         
-                        if name_arr[name_arr.count-1] == "app"
-                        {
-                            NSWorkspace.shared.openFile(fs_node.path)
-                        }
-                        else
-                        {
-                            changeScene(node: fs_node)
-                        }
+                        if name_arr[name_arr.count-1] == "app"{ NSWorkspace.shared.openFile(fs_node.path)}
+                        else { changeScene(node: fs_node)}
                     }
                     
                     // it has a name and a node was located and it's a file
@@ -243,7 +229,7 @@ func getContentsAtPath(path: String) -> Array<String>
         files = try fileManager.contentsOfDirectory(atPath: path)
         return files
     }
-    catch let _ as NSError
+    catch _ as NSError
     {
         files = []
         return files
@@ -270,7 +256,7 @@ func getFileType(path: String) -> String
     }
     catch
     {
-        print("could not get file type of " + path)
+        //print("could not get file type of " + path)
         return "None"
     }
 }
@@ -279,8 +265,8 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
 {
     let scene = SCNScene(named: "space.scn")
     //scene?.background.contents = NSImage(named: "milkyway2")
-    var textures = ["ceres2", "moon2", "saturn4", "mars2", "venus6",  "haumea2", "makemake2","jupiter_dark"]
-    var textures2 = ["neptune", "mercury2","venus7", "eris2", "uranus3", "eclouds", "mars4","venus_surface"]
+    let textures = ["ceres2", "moon2", "saturn4", "mars2", "venus6",  "haumea2", "makemake2","jupiter_dark"]
+    let textures2 = ["neptune", "mercury2","venus7", "eris2", "uranus3", "eclouds", "mars4","venus_surface"]
     
     let sun = makeSun(scene: scene!, path: path)
     var x_min = Double(350)
@@ -307,15 +293,13 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
     
     let astroid_scene1 = SCNScene(named: "ba.dae")
     let node = astroid_scene1?.rootNode.childNode(withName: "Sphere", recursively: true)
-    //let astroid_scene2 = SCNScene(named: "quarter_asteroid.dae")
-    //let node2 = astroid_scene2?.rootNode.childNode(withName: "Cube", recursively: true)
+
     let astroid_scene3 = SCNScene(named: "Small_Asteroid.dae")
     let node3 = astroid_scene3?.rootNode.childNode(withName: "Aster_Small_4_", recursively: true)
     
     let node2 = node3
     let node4 = node3
-    //let astroid_scene4 = SCNScene(named: "tq_astroid.dae")
-    //let node4 = astroid_scene4?.rootNode.childNode(withName: "Cube", recursively: true)
+
     
     if dir_count == 0 && astroid_count == 0 {return scene!}
     var first_directories = [FSNode]()
@@ -335,10 +319,6 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
             else // dir_count odd
             {
                 let result = dir_count/2
-                print("dir_count:")
-                print(dir_count)
-                print("result dividing by 2")
-                print(result)
                 for i in 0...((dir_count/2)) {first_directories.append(directories[i])}
                 for i in dir_count/2 + 1...dir_count-1{second_directories.append(directories[i])}
             }
@@ -405,7 +385,7 @@ func makeDirectories(scene: SCNScene, sun: SCNNode, x_min: Double, directories: 
         if num_children > 40 {illustration_lenght = (Double(num_children) * Double(16.3)) + Double(30)}
         else if num_children > 25 {illustration_lenght = (Double(num_children) * Double(8.3)) + Double(30)}
         else if num_children > 15 {illustration_lenght = (Double(num_children) * Double(2.3)) + Double(30)}
-        else {illustration_lenght = Double(3.0 * (Float(num_children) * 5)) + Double(30)}
+        else {illustration_lenght = Double(3.0 * (Float(num_children) * 7)) + Double(70)}
         let distance_from_sun = x_s + (illustration_lenght / Double(2)) // find center
         let torus = makeTorus(distance_from_sun: distance_from_sun)
         scene.rootNode.addChildNode(torus)
@@ -591,12 +571,8 @@ func makeSubAsteroids(scene: SCNScene, sun: SCNNode, node2: SCNNode, node3: SCNN
 func addNebulas(scene: SCNScene)
 {
     let nebula_starts = [500000, -500000, 200000, -100000, 1000000, 2000000]
-    let nebula_starts_y = [0, 10000, 10000, 10000, -1000, 0]
+    //let nebula_starts_y = [0, 10000, 10000, 10000, -1000, 0]
     var i = 0
-    //var nebulas = [SCNNode]()
-    //var nebulas_radius = [Int]()
-    //var nebula_cluster = [[SCNNode]]()
-    //var cluster_radius = [[Int]]()
     var nebula_positions = [String]()
     var star_planets = [SCNNode]()
     let nebula_count = 30
@@ -629,7 +605,6 @@ func addNebulas(scene: SCNScene)
             let z = Int(Double(Float.random(in: Float(1000)..<Float(200000))))
             
             let cubeGeometry = SCNSphere(radius: CGFloat(50000 + (i*1000)))
-            let nebula_size = 50000 + (i*1000)
             
             let sphereMaterial = SCNMaterial()
             sphereMaterial.locksAmbientWithDiffuse = true
@@ -663,13 +638,13 @@ func addNebulas(scene: SCNScene)
                     sphereMaterial.emission.contents = "rednebula.png"
                 }
                 
-                sphereMaterial.transparency = 0.0003
+                sphereMaterial.transparency = 0.0001
             }
             else
             {
                 sphereMaterial.diffuse.contents = "nebula4" // purple
                 sphereMaterial.emission.contents = "nebula4"
-                sphereMaterial.transparency = 0.0005
+                sphereMaterial.transparency = 0.0003
             }
             cubeGeometry.materials = [sphereMaterial]
             let child_sphere1 = SCNNode(geometry: cubeGeometry)
@@ -719,56 +694,6 @@ func addNebulas(scene: SCNScene)
 func isInsideSphere(x: Int, y: Int, z: Int, cx: Int, cy: Int, cz: Int, r: Int) -> Bool
 {
     return (x - cx)^2 + (y - cy)^2 + (z - cz)^2 < r^2
-}
-
-func makeNebulaStars(scene: SCNScene, num_stars: Int, location_range: Int, x: Int, y: Int, z: Int)
-{
-    var duration = 10.0
-    var count = 0
-    
-    for i in 1...num_stars
-    {
-        count += 1
-        if count == 5 {count = 1}
-        
-        let sphereGeometry = SCNSphere(radius: CGFloat(1))
-        
-        let sphereMaterial = SCNMaterial()
-        sphereMaterial.locksAmbientWithDiffuse = true
-        sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
-        sphereMaterial.diffuse.contents = "starcolor2.png"
-        sphereGeometry.materials = [sphereMaterial]
-        let sphere1 = SCNNode(geometry: sphereGeometry)
-        
-        scene.rootNode.addChildNode(sphere1)
-        
-        let circular_x_position: Double
-        let circular_z_position: Double
-        let distance = Double(Float.random(in: Float(0 - location_range)..<Float(0 + location_range)))
-        let y_location = Double(Float.random(in: Float(y - location_range)..<Float(y + location_range)))
-        
-        var a = Double(0)
-        
-        if count == 1 {a = Double(Float.random(in: Float(0)..<Float(85)))}
-        
-        if count == 2 {a = Double(Float.random(in: Float(95)..<Float(175)))}
-        
-        if count == 3 {a = Double(Float.random(in: Float(185)..<Float(265)))}
-        
-        if count == 4 {a = Double(Float.random(in: Float(275)..<Float(355)))}
-        
-        circular_x_position = Double(x) + distance * cos(a) // x = cx + r * cos(a)
-        circular_z_position = Double(z) + distance * sin(a) // y = cy + r * sin(a)
-        sphere1.position = SCNVector3(x: CGFloat(circular_x_position), y: CGFloat(y_location), z: CGFloat( circular_z_position))
-        
-        if i % 5 == 0
-        {
-            sphere1.runAction(SCNAction.scale(by: CGFloat(0.8), duration: 5))
-            duration += 0.01
-        }
-        
-        sphere1.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 5, z: 0, duration: Double(40))))
-    }
 }
 
 func createStars(scene: SCNScene)
@@ -1016,7 +941,6 @@ func findNode(new_root_path: String, root: FSNode) -> FSNode
     //if path_dir_arr.count >= root_paths.count {path_dir_arr.removeFirst(size)}
     var i = 0
     let _new_root_path = "/" + new_root_path
-    print("Seeking to create: " + _new_root_path)
     if path_dir_arr.count > 0
     {
         while fs_node.path != _new_root_path
