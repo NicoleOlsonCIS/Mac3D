@@ -267,8 +267,8 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
     let asteroid_count = files.count
     
     // asteroids that represent files
-    let asteroid_scene1 = SCNScene(named: "ba.dae")
-    let node = asteroid_scene1?.rootNode.childNode(withName: "Sphere", recursively: true)
+    let asteroid_scene1 = SCNScene(named: "fileasteroid2.dae")
+    let node = asteroid_scene1?.rootNode.childNode(withName: "Icosphere", recursively: true)
 
     // decoration asteroids
     let asteroid_scene3 = SCNScene(named: "Small_Asteroid.dae")
