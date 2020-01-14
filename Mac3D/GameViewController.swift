@@ -88,7 +88,7 @@ class GameViewController: NSViewController
         sceneView.gestureRecognizers = [dehClickies]
     }
     
-    // create three full levels below new sun, is new sun is leaf then nothing changes
+    // create three full levels below new sun, if new sun is leaf then nothing changes
     func pingDepthAndCreate(new_sun: FSNode)
     {
         if new_sun.child_count == -1 {new_sun.addChildren(parent: new_sun.parent!)}
@@ -146,6 +146,8 @@ class GameViewController: NSViewController
                         path_arr = removeEmptyInStringArray(str_arr: path_arr)
                         if path_arr[path_arr.count - 1 ] == "sun"
                         {
+                            // BUG ADD PROVISIONS FOR ROOT HERE
+                            
                             // remove the last two
                             path_arr.remove(at: path_arr.count-1)
                             path_arr.remove(at: path_arr.count-1)
@@ -252,6 +254,7 @@ func getFileType(path: String) -> String
         let fileManager = FileManager.default
         let attributes = try fileManager.attributesOfItem(atPath: path)
         let type = attributes[.type] as! String
+        //print("File type: " + type)
         return type
     }
     catch
@@ -264,7 +267,6 @@ func getFileType(path: String) -> String
 func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
 {
     let scene = SCNScene(named: "space.scn")
-    //scene?.background.contents = NSImage(named: "milkyway2")
     let textures = ["ceres2", "moon2", "saturn4", "mars2", "venus6",  "haumea2", "makemake2","jupiter_dark"]
     let textures2 = ["neptune", "mercury2","venus7", "eris2", "uranus3", "eclouds", "mars4","venus_surface"]
     
@@ -382,7 +384,7 @@ func makeDirectories(scene: SCNScene, sun: SCNNode, x_min: Double, directories: 
         var subdirectories = 0
         for dc in directory.children { if dc.kind == "NSFileTypeDirectory"{subdirectories += 1}}
         let num_children = subdirectories
-        if num_children > 40 {illustration_lenght = (Double(num_children) * Double(16.3)) + Double(30)}
+        if num_children > 40 {illustration_lenght = (Double(num_children) * Double(14.3)) + Double(30)}
         else if num_children > 25 {illustration_lenght = (Double(num_children) * Double(8.3)) + Double(30)}
         else if num_children > 15 {illustration_lenght = (Double(num_children) * Double(2.3)) + Double(30)}
         else {illustration_lenght = Double(3.0 * (Float(num_children) * 7)) + Double(70)}
@@ -499,7 +501,7 @@ func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode,
         if astroid.name.count > 11 { name = adjustName(name: astroid.name, length: 10) }
         else {name = astroid.name}
         
-        let text_node = makeText(scene: scene, text: name, size: 1, color: "red")
+        let text_node = makeText(scene: scene, text: name, size: 3, color: "red")
         new_node.addChildNode(text_node)
         new_node.addChildNode(text_node)
         
@@ -867,7 +869,7 @@ func makeTorus(distance_from_sun: Double) -> SCNNode
 {
     let torus_geometry = SCNTorus(ringRadius: CGFloat(distance_from_sun), pipeRadius: CGFloat(0.01))
     let torus_material = SCNMaterial()
-    torus_material.transparency = 0.02 // brightness of sun illuminates
+    torus_material.transparency = 0.03 // brightness of sun illuminates
     torus_geometry.materials = [torus_material]
     return SCNNode(geometry: torus_geometry)
 }
@@ -1024,6 +1026,7 @@ class FSNode
                 
                 let newFSNode = FSNode(name: c, kind: fileType, path: path + "/" + c, depth: depth + 1)
                 newFSNode.parent = self
+                print("File with name " + newFSNode.name + " has file type of " + fileType)
                 self.children.append(newFSNode)
             }
             self.child_count = self.children.count
