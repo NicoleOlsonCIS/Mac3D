@@ -546,7 +546,8 @@
 				87DDE0FF23A02B4300B8D285 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
+			path = /Users/nicoleolson/Desktop/Mac3D/Mac3D;
+			sourceTree = "<absolute>";
 		};
 /* End PBXVariantGroup section */
 
