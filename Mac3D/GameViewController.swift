@@ -1,11 +1,7 @@
-//
 //  GameViewController.swift
 //  Mac3D
-//
 //  Created by Nicole Olson on 12/10/19.
 //  Copyright © 2019 Nicole Olson. All rights reserved.
-//
-
 
 import SceneKit
 import AppKit
@@ -13,7 +9,7 @@ import Foundation
 
 var depth_init = 3
 let root_path = "/"
-let sun_radius = 64.0
+let sun_radius = 154.0 // sun sized increased from demo by 100
 let dir_radius = 20.0
 let moon_radius = 1.5
 var scenes = [String: SCNScene]()
@@ -43,7 +39,7 @@ class GameViewController: NSViewController
     
     func saveScene(scene: SCNScene, path: String){ scenes[path] = scene }
     func sceneExists(path: String) -> Bool{ return (scenes[path] == nil ? false : true);}
-    func retrieveScene(path: String) -> SCNScene{ return scenes[path]! } // pre-req: true from "sceneExists(path)"
+    func retrieveScene(path: String) -> SCNScene{ return scenes[path]! } // pre-req: return true from "sceneExists(path)"
  
     func createScene(node: FSNode, path: String) -> SCNScene
     {
@@ -81,11 +77,11 @@ class GameViewController: NSViewController
         scene.rootNode.addChildNode(cameraNode)
         
         sceneView.scene = scene // when the scene changes you change this on the sceneView
-        sceneView.delegate = self //as! SCNSceneRendererDelegate // sets the delegate of the Scene Kit view to self. So that the view can call the
+        sceneView.delegate = self // sets the delegate of the Scene Kit view to self. So that the view can call the delegate functions for user interaction
         sceneView.pointOfView = cameraNode
-        let dehClickies = NSClickGestureRecognizer()
-        dehClickies.action = #selector(GameViewController.sceneViewClicked(recognizer:))
-        sceneView.gestureRecognizers = [dehClickies]
+        let click = NSClickGestureRecognizer()
+        click.action = #selector(GameViewController.sceneViewClicked(recognizer:))
+        sceneView.gestureRecognizers = [click]
     }
     
     // create three full levels below new sun, if new sun is leaf then nothing changes
@@ -146,7 +142,8 @@ class GameViewController: NSViewController
                         path_arr = removeEmptyInStringArray(str_arr: path_arr)
                         if path_arr[path_arr.count - 1 ] == "sun"
                         {
-                            // BUG ADD PROVISIONS FOR ROOT HERE
+                            // when at root clicking on sun does nothing
+                            if path_arr.count == 1 {return}
                             
                             // remove the last two
                             path_arr.remove(at: path_arr.count-1)
@@ -157,7 +154,7 @@ class GameViewController: NSViewController
                             for p in path_arr{ path += ("/" + p)}
                             fs_node = findNode(new_root_path: path, root: root)
                         }
-                        else
+                        else // not a sun
                         {
                             var path = ""
                             for p in path_arr{ if p != "" && p != "sun" {path += ("/" + p)}}
@@ -178,26 +175,16 @@ class GameViewController: NSViewController
                         else { changeScene(node: fs_node)}
                     }
                     
-                    // it has a name and a node was located and it's a file
-                    else
-                    {
-                        print("opening . . .")
-                        NSWorkspace.shared.openFile(fs_node.path) // fs_node files do not have paths as names
-                    }
+                    // otherwise: it has a name and a node was located and it's a file
+                    else { NSWorkspace.shared.openFile(fs_node.path)}
+                    // note: unlike directories, fs_node files do not have paths as names
                 }
             }
         }
     }
 }
 
-extension GameViewController: SCNSceneRendererDelegate {
-    // 2
-    func renderer(renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        // 3
-        //spawnShape()
-        print("")
-    }
-}
+extension GameViewController: SCNSceneRendererDelegate {private func renderer(renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) { print("") }}
 
 func getCDContents(path: String, full: Bool) -> Array<String>
 {
@@ -219,23 +206,15 @@ func getCDContents(path: String, full: Bool) -> Array<String>
     }
 }
 
-
-// helping function
+// use FileManager functionality to get content specified by a path
 func getContentsAtPath(path: String) -> Array<String>
 {
-    var files = [String]()
+    let files = [String]()
     let fileManager = FileManager.default
     
-    do
-    {
-        files = try fileManager.contentsOfDirectory(atPath: path)
-        return files
-    }
-    catch _ as NSError
-    {
-        files = []
-        return files
-    }
+    do  { return try fileManager.contentsOfDirectory(atPath: path) }
+        
+    catch _ as NSError { return files } // catch failure by returning empty array
 }
 
 // helper function filters out directory contents that start with "."
@@ -253,15 +232,9 @@ func getFileType(path: String) -> String
     {
         let fileManager = FileManager.default
         let attributes = try fileManager.attributesOfItem(atPath: path)
-        let type = attributes[.type] as! String
-        //print("File type: " + type)
-        return type
+        return attributes[.type] as! String
     }
-    catch
-    {
-        //print("could not get file type of " + path)
-        return "None"
-    }
+    catch { return "None" }
 }
 
 func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
@@ -291,19 +264,21 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
     directories.sort(by: { $0.subdirectory_count < $1.subdirectory_count })
     
     let dir_count = directories.count
-    let astroid_count = files.count
+    let asteroid_count = files.count
     
-    let astroid_scene1 = SCNScene(named: "ba.dae")
-    let node = astroid_scene1?.rootNode.childNode(withName: "Sphere", recursively: true)
+    // asteroids that represent files
+    let asteroid_scene1 = SCNScene(named: "ba.dae")
+    let node = asteroid_scene1?.rootNode.childNode(withName: "Sphere", recursively: true)
 
-    let astroid_scene3 = SCNScene(named: "Small_Asteroid.dae")
-    let node3 = astroid_scene3?.rootNode.childNode(withName: "Aster_Small_4_", recursively: true)
+    // decoration asteroids
+    let asteroid_scene3 = SCNScene(named: "Small_Asteroid.dae")
+    let node3 = asteroid_scene3?.rootNode.childNode(withName: "Aster_Small_4_", recursively: true)
     
     let node2 = node3
     let node4 = node3
 
     
-    if dir_count == 0 && astroid_count == 0 {return scene!}
+    if dir_count == 0 && asteroid_count == 0 {return scene!}
     var first_directories = [FSNode]()
     var second_directories = [FSNode]()
     
@@ -320,35 +295,30 @@ func illustrate(root_of_scene: FSNode, path: String) -> SCNScene
             }
             else // dir_count odd
             {
-                let result = dir_count/2
                 for i in 0...((dir_count/2)) {first_directories.append(directories[i])}
                 for i in dir_count/2 + 1...dir_count-1{second_directories.append(directories[i])}
             }
         }
-        else
-        {
-            for i in 0...dir_count-1 {first_directories.append(directories[i])}
-        }
+        else { for i in 0...dir_count-1 {first_directories.append(directories[i])} }
     }
     
-    var first_astroids = [FSNode]()
-    var second_astroids = [FSNode]()
+    var first_asteroids = [FSNode]()
+    var second_asteroids = [FSNode]()
     
-    if astroid_count > 10
+    if asteroid_count > 10
     {
-        for i in 0...astroid_count/2{first_astroids.append(files[i])}
-        for i in astroid_count/2...astroid_count-1{second_astroids.append(files[i])}
+        for i in 0...asteroid_count/2{first_asteroids.append(files[i])}
+        for i in asteroid_count/2...asteroid_count-1{second_asteroids.append(files[i])}
     }
-    else {first_astroids = files}
+    else {first_asteroids = files}
     
-
     x_min = makeDirectories(scene: scene!, sun: sun, x_min: x_min, directories: first_directories, textures: textures)
-    x_min = makeAsteroids(scene: scene!, sun: sun, node: node!, node2: node2!, node3: node3!, node4: node4!, x_start: x_min, astroids: first_astroids)
+    x_min = makeAsteroids(scene: scene!, sun: sun, node: node!, node2: node2!, node3: node3!, node4: node4!, x_start: x_min, asteroids: first_asteroids)
     if dir_count > 5
     {
         x_min = makeDirectories(scene: scene!, sun: sun, x_min: x_min, directories: second_directories, textures: textures2)
     }
-    x_min = makeAsteroids(scene: scene!, sun: sun, node: node!, node2: node2!, node3: node3!, node4: node4!, x_start: x_min, astroids: second_astroids)
+    x_min = makeAsteroids(scene: scene!, sun: sun, node: node!, node2: node2!, node3: node3!, node4: node4!, x_start: x_min, asteroids: second_asteroids)
     createStars(scene: scene!)
     addNebulas(scene: scene!)
     
@@ -450,7 +420,6 @@ func makeMoons(scene: SCNScene, distance: Double, planet: SCNNode, directory: FS
             }
             else {name = element.name}
             
-            
             let text_node = makeText(scene: scene, text: name, size: 2, color: "green")
             moon.addChildNode(text_node)
             let x_offset = calculateTextOffset_X(length: element.name.count, size: 2)
@@ -470,18 +439,18 @@ func makeMoons(scene: SCNScene, distance: Double, planet: SCNNode, directory: FS
     }
 }
 
-func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode, node3: SCNNode, node4: SCNNode, x_start: Double, astroids: Array<FSNode>) -> Double
+func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode, node3: SCNNode, node4: SCNNode, x_start: Double, asteroids: Array<FSNode>) -> Double
 {
     var x_s = x_start
-    if astroids.count > 0 {x_s += 15} // extra space before the astroid belt
+    if asteroids.count > 0 {x_s += 15} // extra space before the asteroid belt
     var as_count = 0
     
-    for astroid in astroids
+    for asteroid in asteroids
     {
         as_count += 1
         if as_count == 5 {as_count = 1}
         let new_node = node.clone()
-        new_node.name = astroid.path
+        new_node.name = asteroid.path
         let helper = SCNNode()
         
         helper.position = SCNVector3(x:0,y:0,z:0)
@@ -498,8 +467,8 @@ func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode,
         x_s += 2
         
         var name = ""
-        if astroid.name.count > 11 { name = adjustName(name: astroid.name, length: 10) }
-        else {name = astroid.name}
+        if asteroid.name.count > 11 { name = adjustName(name: asteroid.name, length: 10) }
+        else {name = asteroid.name}
         
         let text_node = makeText(scene: scene, text: name, size: 3, color: "red")
         new_node.addChildNode(text_node)
@@ -508,10 +477,11 @@ func makeAsteroids(scene: SCNScene, sun: SCNNode, node: SCNNode, node2: SCNNode,
         x_s = makeSubAsteroids(scene: scene, sun: sun, node2: node2, node3: node3, node4: node4, x: x_s, count: 30)
     }
     
-    if astroids.count > 0 {x_s += 15} // extra space after the astroid belt
+    if asteroids.count > 0 {x_s += 15} // extra space after the asteroid belt
     return x_s
 }
 
+// create a name with "\n" in it to improve appearance of long names
 func adjustName(name: String, length: Int) -> String
 {
     let names = name.split(by: length)
@@ -542,7 +512,7 @@ extension String
     }
 }
 
-// non-files decorative astroid belt content, do not advance x_min, vary in z for every x of a real file
+// non-files decorative asteroid belt content, do not advance x_min, vary in z for every x of a real file
 func makeSubAsteroids(scene: SCNScene, sun: SCNNode, node2: SCNNode, node3: SCNNode, node4: SCNNode, x: Double, count: Int) -> Double
 {
     var x_s = x
@@ -573,7 +543,6 @@ func makeSubAsteroids(scene: SCNScene, sun: SCNNode, node2: SCNNode, node3: SCNN
 func addNebulas(scene: SCNScene)
 {
     let nebula_starts = [500000, -500000, 200000, -100000, 1000000, 2000000]
-    //let nebula_starts_y = [0, 10000, 10000, 10000, -1000, 0]
     var i = 0
     var nebula_positions = [String]()
     var star_planets = [SCNNode]()
@@ -586,15 +555,15 @@ func addNebulas(scene: SCNScene)
         let parenty = nebula_starts[i]
         i += 1
         
-        let cubeGeometry = SCNSphere(radius: 5000)
+        let sphereGeometry = SCNSphere(radius: 5000)
         
         let sphereMaterial = SCNMaterial()
         sphereMaterial.locksAmbientWithDiffuse = true
         sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
         sphereMaterial.diffuse.contents = "nebula3"
         sphereMaterial.transparency = 0.01
-        cubeGeometry.materials = [sphereMaterial]
-        let sphere1 = SCNNode(geometry: cubeGeometry)
+        sphereGeometry.materials = [sphereMaterial]
+        let sphere1 = SCNNode(geometry: sphereGeometry)
         
         scene.rootNode.addChildNode(sphere1)
         sphere1.position = SCNVector3(x: CGFloat(parentx), y: CGFloat(0), z: CGFloat(parenty))
@@ -606,7 +575,7 @@ func addNebulas(scene: SCNScene)
             let y = Int(Double(Float.random(in: Float(0)..<Float(100000))))
             let z = Int(Double(Float.random(in: Float(1000)..<Float(200000))))
             
-            let cubeGeometry = SCNSphere(radius: CGFloat(50000 + (i*1000)))
+            let sphereGeometry = SCNSphere(radius: CGFloat(50000 + (i*1000)))
             
             let sphereMaterial = SCNMaterial()
             sphereMaterial.locksAmbientWithDiffuse = true
@@ -648,8 +617,8 @@ func addNebulas(scene: SCNScene)
                 sphereMaterial.emission.contents = "nebula4"
                 sphereMaterial.transparency = 0.0003
             }
-            cubeGeometry.materials = [sphereMaterial]
-            let child_sphere1 = SCNNode(geometry: cubeGeometry)
+            sphereGeometry.materials = [sphereMaterial]
+            let child_sphere1 = SCNNode(geometry: sphereGeometry)
             starGeometry.materials = [starMaterial]
             let child_star = SCNNode(geometry: starGeometry)
             
@@ -677,16 +646,9 @@ func addNebulas(scene: SCNScene)
     var count = 0
     for n in nebula_positions
     {
-        // separate by "-"
         let items = n.components(separatedBy: "*")
         var coordinates = [Int]()
-        for i in items
-        {
-            if i != nil
-            {
-                if let place = Int(i) {coordinates.append(place)}
-            }
-        }
+        for i in items { if let place = Int(i) {coordinates.append(place)} }
         star_planets[count].position = SCNVector3(x: CGFloat(coordinates[0]), y: CGFloat(coordinates[1]), z: CGFloat(coordinates[2]))
         count += 1
     }
@@ -700,25 +662,12 @@ func isInsideSphere(x: Int, y: Int, z: Int, cx: Int, cy: Int, cz: Int, r: Int) -
 
 func createStars(scene: SCNScene)
 {
-
-    var x1: Int
-    var y1: Int
-    var z1: Int
-    var x2: Int
-    var y2: Int
-    var z2: Int
-    var x3: Int
-    var y3: Int
-    var z3: Int
-    var x: Int
-    var y: Int
-    var z: Int
+    var x1, y1, z1, x2, y2, z2, x3, y3, z3, x, y, z: Int
     var duration = 10.0
     
     // make stars below and above
     for i in 1...10000
     {
-        
         x1 = Int(Double(Float.random(in: Float(-1000)..<Float(-50))))
         y1 = Int(Double(Float.random(in: Float(-1000)..<Float(-200))))
         z1 = Int(Double(Float.random(in: Float(-1000)..<Float(-5))))
@@ -742,10 +691,6 @@ func createStars(scene: SCNScene)
         sphereMaterial.locksAmbientWithDiffuse = true
         sphereMaterial.lightingModel = SCNMaterial.LightingModel.blinn
         sphereMaterial.diffuse.contents = "starcolor2.png"
-        
-        //if i % 12 == 0 { sphereMaterial.diffuse.contents = NSColor.purple }
-        //if i % 16 == 0 { sphereMaterial.diffuse.contents = NSColor.blue }
-        //if i % 10 == 0 { sphereMaterial.diffuse.contents = NSColor.red }
         
         sphereGeometry.materials = [sphereMaterial]
         let sphere1 = SCNNode(geometry: sphereGeometry)
@@ -837,7 +782,6 @@ func makePlanet(is_moon: Bool, name: String, texture_type: String, texture: Stri
         }
     }
     
-    //sphere_material.diffuse.contents = NSColor.gray
     sphere_geometry.materials = [sphere_material]
     sphere_geometry.segmentCount = 80
     let dir_node = SCNNode(geometry: sphere_geometry)
@@ -869,11 +813,12 @@ func makeTorus(distance_from_sun: Double) -> SCNNode
 {
     let torus_geometry = SCNTorus(ringRadius: CGFloat(distance_from_sun), pipeRadius: CGFloat(0.01))
     let torus_material = SCNMaterial()
-    torus_material.transparency = 0.03 // brightness of sun illuminates
+    torus_material.transparency = 0.03 // low because brightness of sun illuminates
     torus_geometry.materials = [torus_material]
     return SCNNode(geometry: torus_geometry)
 }
 
+// for a given distance, compute random x and z position along a circle.
 func positionNodeAtDistance(node: SCNNode, distance: Double, count: Int, hasY: Bool)
 {
     let start_x: Double
@@ -923,7 +868,8 @@ func calculateTextOffset_Y(radius: Double) -> Double
     return 1
 }
 
-// name is a path
+// locates a node in the FSNode tree from path
+// FSNode.name is a path on nodes with file type of directory
 func findNode(new_root_path: String, root: FSNode) -> FSNode
 {
     var path_dir_arr = getArrFromPath(path: new_root_path)
@@ -967,31 +913,24 @@ func findNode(new_root_path: String, root: FSNode) -> FSNode
     return fs_node
 }
 
-func removeEmptyInStringArray(str_arr: Array<String>) -> Array<String>
-{
-    let new_arr = str_arr.filter { $0 != "" }
-    return new_arr
-}
-
+// remove unwanted spaces from return of .components function
+func removeEmptyInStringArray(str_arr: Array<String>) -> Array<String> { return str_arr.filter { $0 != "" } }
 
 // convert path to array of path items
-func getArrFromPath(path: String) -> Array<String>
-{
-    let items = path.components(separatedBy: "/")
-    return items
-}
+func getArrFromPath(path: String) -> Array<String> { return path.components(separatedBy: "/") }
 
 func getCwdFromPath(path: String) -> String
 {
     let arr = getArrFromPath(path: path)
     let size = arr.count
-    let last = arr[size - 1]
-    return last
+    return arr[size - 1] // return the cwd, the last in the array
 }
 
 // ---------------------------- Structs and Classes ------------------------ //
 
-// Init of an FSNode includes recursive call to create children up to level defined in global "maxLevel"
+// Overload init explanation
+// First init of an FSNode uses recursive call to create children up to level defined in global "maxLevel"
+// Second init adds one level of children per call to a particular branch
 class FSNode
 {
     // recursing init builds tree from a root to a global defined "depth_init"
@@ -1018,23 +957,16 @@ class FSNode
                 {
                     var myStringArr = fileType.components(separatedBy: ".")
 
-                    if myStringArr.count >= 2
-                    {
-                        fileType = myStringArr[1]
-                    }
+                    if myStringArr.count >= 2 { fileType = myStringArr[1] }
                 }
                 
                 let newFSNode = FSNode(name: c, kind: fileType, path: path + "/" + c, depth: depth + 1)
                 newFSNode.parent = self
-                print("File with name " + newFSNode.name + " has file type of " + fileType)
                 self.children.append(newFSNode)
             }
             self.child_count = self.children.count
         }
-        else
-        {
-            self.child_count = 0 // 0 means it is a leaf, -1 means it may be a leaf but could just not be filled out yet
-        }
+        else { self.child_count = 0 }// 0 means it is a leaf, -1 means it may be a leaf but could just not be filled out yet
     }
     
     // non-recursing init used in adding 1 depth to a particular branch
@@ -1078,10 +1010,7 @@ class FSNode
                     {
                         var myStringArr = fileType.components(separatedBy: ".")
                         
-                        if myStringArr.count >= 2
-                        {
-                            fileType = myStringArr[1]
-                        }
+                        if myStringArr.count >= 2 { fileType = myStringArr[1] }
                     }
                     
                     let newFSNode = FSNode(name: c, kind: fileType, path: parent.path + "/" + c, depth: parent.depth + 1, parent: parent)
@@ -1090,12 +1019,8 @@ class FSNode
                 }
                 parent.child_count = parent.children.count
             }
-            else
-            {
-                parent.child_count = 0 // otherwise this parent is a leaf
-            }
+            else { parent.child_count = 0 } // otherwise this parent is a leaf }
         }
-        
         return
     }
 }
